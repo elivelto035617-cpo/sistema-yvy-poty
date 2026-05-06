@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel STE — Yvy Poty</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* ═══════════════════════════════════════════
+           SISTEMA DE TOKENS E TEMA
+           ═══════════════════════════════════════════ */
+        :root {
+            --accent: #3b82f6; --accent-deep: #1d4ed8; --accent-glow: rgba(59,130,246,0.25);
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --primary: #1a73e8;
+            --bg-root: #f0f4ff; --bg-shell: #ffffff; --bg-sidebar: #fafbff; --bg-card: #f5f7ff;
+            --bg-input: #eef1fb; --text-primary: #0f172a; --text-secondary: #475569;
+            --text-muted: #94a3b8; --border: rgba(148,163,184,0.25);
+            --shadow-dark: rgba(0,0,0,0.10); --nav-bg: rgba(255,255,255,0.9);
+        }
+
+        [data-theme="dark"] {
+            --bg-root: #080c14; --bg-shell: #0e1422; --bg-sidebar: #0b1020; --bg-card: #131a2e;
+            --bg-input: #0f1525; --text-primary: #e2e8f0; --text-secondary: #94a3b8;
+            --text-muted: #475569; --border: rgba(59,130,246,0.12);
+            --shadow-dark: rgba(0,0,0,0.55); --nav-bg: rgba(13,19,35,0.95);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-root); height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; color: var(--text-primary); transition: background 0.5s ease; }
+
+        /* ═══════════════════════════════════════════
+           TELA DE LOGIN (ANIMAÇÃO BORDAS NEON)
+           ═══════════════════════════════════════════ */
+        #section-login {
+            position: relative; width: 380px; padding: 5px; background: #000; border-radius: 20px; overflow: hidden; display: flex; box-shadow: 0 20px 50px rgba(0,0,0,0.7); z-index: 100;
+        }
+        #section-login::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, transparent, transparent, var(--accent), var(--success), var(--accent));
+            animation: rotateNeon 4s linear infinite;
+        }
+        #section-login::after {
+            content: ''; position: absolute; inset: 6px; background: var(--bg-shell); border-radius: 16px; z-index: 1; transition: background 0.4s;
+        }
+        @keyframes rotateNeon { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .login-box { position: relative; z-index: 10; width: 100%; padding: 40px 30px; text-align: center; }
+        .logo-login { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--border); margin-bottom: 20px; object-fit: cover; }
+        .login-box h2 { font-family: 'Syne', sans-serif; margin-bottom: 20px; font-weight: 800; color: var(--text-primary); }
+        .btn-neon { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent), var(--success)); color: white; font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 15px var(--accent-glow); }
+        .btn-neon:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--accent-glow); }
+
+        /* ═══════════════════════════════════════════
+           APP SHELL E SIDEBAR
+           ═══════════════════════════════════════════ */
+        #app-screen { display: none; width: 96%; max-width: 1360px; height: 92vh; background: var(--bg-shell); border-radius: 28px; overflow: hidden; box-shadow: 0 40px 80px var(--shadow-dark); border: 1px solid var(--border); position: relative; }
+        .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 30px 22px; display: flex; flex-direction: column; align-items: center; position: relative; flex-shrink: 0; }
+        .logo-escola { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-shell); margin-bottom: 20px; box-shadow: 0 5px 15px var(--shadow-dark); }
+        .user-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; text-align: center; margin-bottom: 20px; box-shadow: inset 0 2px 4px var(--shadow-dark); }
+        .role-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow); color: var(--accent); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-top: 5px; }
+        .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 20px; font-weight: 800; color: var(--success); }
+
+        .btn-tema { display: flex; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 9px 18px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.3s; }
+        .btn-admin-box { position: absolute; bottom: 30px; display: flex; gap: 15px; }
+        .btn-admin { width: 55px; height: 55px; border-radius: 15px; border: none; color: white; font-size: 22px; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-m { background: var(--warning); } .btn-u { background: var(--success); }
+
+        /* ═══════════════════════════════════════════
+           ÁREA DE CONTEÚDO
+           ═══════════════════════════════════════════ */
+        .right-area { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--bg-shell); }
+        .content-scroll { flex: 1; padding: 40px; overflow-y: auto; padding-bottom: 150px; }
+        .aba { display: none; } .aba.ativa { display: block; animation: fadeUp 0.4s ease-out; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px var(--shadow-dark); }
+        .field-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px; }
+        .input-modern { width: 100%; height: 48px; padding: 0 15px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text-primary); font-weight: 500; outline: none; transition: 0.3s; }
+        .input-modern:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+
+        .box-textos { display: flex; gap: 15px; margin-bottom: 20px; }
+        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid transparent; }
+        .info-box.required { border-color: rgba(239,68,68,0.3); }
+        .info-box.optional { border-color: rgba(59,130,246,0.2); }
+
+        .grade-horarios { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .slot { padding: 15px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer; border: none; display: flex; flex-direction: column; gap: 4px; transition: 0.2s; box-shadow: 0 4px 10px var(--shadow-dark); }
+        .slot.livre { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+        .slot.ocupado { background: var(--bg-input); color: var(--text-muted); border: 1px solid var(--border); cursor: not-allowed; }
+
+        .tabela { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        .tabela td { padding: 15px; background: var(--bg-input); font-size: 14px; }
+        .tabela td:first-child { border-radius: 12px 0 0 12px; color: var(--accent); font-weight: bold; }
+        .tabela td:last-child { border-radius: 0 12px 12px 0; text-align: center; }
+
+        /* ═══════════════════════════════════════════
+           NAVBAR (ALINHAMENTO MATEMÁTICO)
+           ═══════════════════════════════════════════ */
+        .navbar-wrap { position: absolute; bottom: 0; left: 0; right: 0; height: 120px; display: flex; justify-content: center; align-items: center; background: linear-gradient(transparent, var(--bg-shell) 70%); pointer-events: none; }
+        .navigation { pointer-events: auto; width: 600px; height: 75px; background: var(--nav-bg); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 15px 35px var(--shadow-dark); display: flex; align-items: center; padding: 0 10px; position: relative; }
+        .nav-ul { display: flex; width: 100%; justify-content: space-evenly; list-style: none; position: relative; }
+        .nav-item { width: 80px; height: 75px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; background: none; border: none; }
+        .nav-item ion-icon { font-size: 24px; color: var(--text-muted); transition: 0.5s; }
+        .nav-item.active ion-icon { transform: translateY(-32px); color: #fff; }
+        .nav-item span { position: absolute; font-size: 10px; font-weight: 800; color: var(--accent); opacity: 0; transform: translateY(20px); transition: 0.5s; text-transform: uppercase; }
+        .nav-item.active span { opacity: 1; transform: translateY(15px); }
+
+        .indicator { position: absolute; top: -35px; width: 70px; height: 70px; background: var(--accent); border-radius: 50%; border: 6px solid var(--bg-shell); transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; box-shadow: 0 5px 15px var(--accent-glow); left: 0; }
+
+        /* ═══════════════════════════════════════════
+           RESPONSIVIDADE
+           ═══════════════════════════════════════════ */
+        @media (max-width: 900px) {
+            #app-screen { flex-direction: column; border-radius: 0; width: 100%; height: 100vh; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; padding: 10px 20px; border-right: none; border-bottom: 1px solid var(--border); }
+            .logo-escola { width: 45px; height: 45px; margin-bottom: 0; }
+            .user-card { flex: 1; margin: 0 10px; padding: 8px; margin-bottom: 0; display: flex; justify-content: space-between; align-items: center; }
+            .clock-display { font-size: 14px; margin-top: 0; }
+            .btn-admin-box { position: relative; bottom: 0; margin-left: 10px; }
+            .btn-admin { width: 40px; height: 40px; font-size: 18px; }
+            .navbar-wrap { height: 80px; }
+            .navigation { width: 100%; border-radius: 0; }
+            .grade-horarios { grid-template-columns: repeat(2, 1fr); }
+            .box-textos { flex-direction: column; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+<div id="section-login">
+    <div class="login-box">
+        <img src="logo.jpg" alt="Logo" class="logo-login" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
+        <h2>Acesso STE</h2>
+        <input type="email" id="l-email" class="input-3d" placeholder="E-mail do professor" style="margin-bottom:15px">
+        <input type="password" id="l-pass" class="input-3d" placeholder="Senha" style="margin-bottom:25px">
+        <button class="btn-neon" id="btn-login" onclick="logar()">Acessar Painel</button>
+    </div>
+</div>
+
+<div id="app-screen">
+    <div class="sidebar">
+        <img src="logo.jpg" alt="Logo" class="logo-escola" onerror="this.src='https://ui-avatars.com/api/?name=Yvy+Poty&background=3b82f6&color=fff'">
+        <div class="user-card">
+            <h3 id="user-display">Carregando...</h3>
+            <span class="role-badge" id="user-role"><ion-icon name="person-outline"></ion-icon> Professor</span>
+            <div class="clock-display" id="local-clock">00:00</div>
+        </div>
+        <button class="btn-tema" id="theme-btn" onclick="toggleTheme()">
+            <ion-icon name="sunny-outline"></ion-icon> <span>Modo Claro</span>
+        </button>
+        <div class="btn-admin-box">
+            <button class="btn-admin btn-m" id="adm-m" title="Painel Admin" onclick="irParaAba('aba-admin')"><ion-icon name="shield-checkmark-outline"></ion-icon></button>
+            <button class="btn-admin btn-u" id="adm-u" title="Exportar CSV" onclick="exportarCSV()"><ion-icon name="cloud-download-outline"></ion-icon></button>
+        </div>
+    </div>
+
+    <div class="right-area">
+        <div class="content-scroll">
+            <div id="aba-agendar" class="aba ativa">
+                <div class="section-header"><span class="section-num">01</span><div class="section-info"><h2>Agendar Recurso</h2><p>Reserve salas e equipamentos</p></div></div>
+                <div class="panel">
+                    <div class="top-controls">
+                        <div class="control-group"><label class="field-label">Data</label><input type="date" id="f-data" class="input-modern" onchange="verificarHorarios()"></div>
+                        <div class="control-group"><label class="field-label">Equipamento</label>
+                            <select id="f-recurso" class="input-modern" onchange="atualizarRegraJustificativa()">
+                                <option value="STE 1">Sala STE 1</option><option value="STE 2">Sala STE 2</option>
+                                <option value="Projetor 1">Projetor 1</option><option value="Som">Caixa de Som</option>
+                            </select>
+                        </div>
+                        <div class="control-group" id="box-admin-nome" style="display:none">
+                            <label class="field-label" style="color:var(--warning)">Agendar para Prof:</label>
+                            <input type="text" id="f-prof-admin" class="input-modern" placeholder="Nome do Professor" style="border-color:var(--warning)">
+                        </div>
+                    </div>
+                    <div class="box-textos">
+                        <div id="box-just" class="info-box required"><span id="tit-just" class="field-label" style="color:var(--danger)">Obrigatório: Conteúdo</span><input type="text" id="f-justificativa" class="input-modern" style="height:40px"></div>
+                        <div class="info-box optional"><span class="field-label" style="color:var(--accent)">Opcional: Obs</span><input type="text" id="f-obs" class="input-modern" style="height:40px"></div>
+                    </div>
+                    <div class="grade-horarios" id="grid-horarios">Selecione uma data...</div>
+                </div>
+            </div>
+
+            <div id="aba-geral" class="aba">
+                <h2>Ocupação do Dia</h2>
+                <div class="panel">
+                    <div class="top-controls">
+                        <div class="control-group"><input type="date" id="v-data" class="input-modern" onchange="carregarVisaoDia()"></div>
+                        <div class="control-group"><select id="v-recurso" class="input-modern" onchange="carregarVisaoDia()"><option value="STE 1">STE 1</option><option value="Projetor 1">Projetor 1</option></select></div>
+                    </div>
+                    <div class="grade-horarios" id="grid-visao"></div>
+                </div>
+            </div>
+
+            <div id="aba-minhas" class="aba">
+                <h2>Minhas Reservas</h2>
+                <div class="panel"><table class="tabela"><tbody id="tabela-minhas"></tbody></table></div>
+            </div>
+
+            <div id="aba-admin" class="aba">
+                <h2 style="color:var(--warning)">Painel Geral Admin</h2>
+                <div class="panel"><table class="tabela"><tbody id="tabela-admin"></tbody></table></div>
+            </div>
+        </div>
+
+        <div class="navbar-wrap">
+            <nav class="navigation">
+                <ul class="nav-ul" id="nav-ul">
+                    <li class="nav-item active" onclick="ativarMenu(this, 'aba-agendar')"><a><ion-icon name="add-circle-outline"></ion-icon><span>Agendar</span></a></li>
+                    <li class="nav-item" onclick="ativarMenu(this, 'aba-geral')"><a><ion-icon name="grid-outline"></ion-icon><span>Ver Dia</span></a></li>
+                    <li class="nav-item" onclick="ativarMenu(this, 'aba-minhas')"><a><ion-icon name="bookmark-outline"></ion-icon><span>Minhas</span></a></li>
+                    <li class="nav-item" onclick="sair()"><a><ion-icon name="log-out-outline"></ion-icon><span>Sair</span></a></li>
+                    <div class="indicator" id="nav-indicator"></div>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // CONFIGURAÇÕES FIREBASE
+    // ==========================================
+    const firebaseConfig = {
+  apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
+  authDomain: "sistema-yvypoty.firebaseapp.com",
+  projectId: "sistema-yvypoty",
+  storageBucket: "sistema-yvypoty.firebasestorage.app",
+  messagingSenderId: "16311833355",
+  appId: "1:16311833355:web:9bd545655745428e4fc80e",
+  measurementId: "G-DR0459S4S3"
+    };
+    const EMAILS_ADMIN = ['eliveltonarandu@gmail.com'; 'davivilhalva@gmail.com']; 
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let userLogado = null;
+    let dataHoje = new Date().toISOString().split('T')[0];
+    const HORARIOS = ["1º Horário", "2º Horário", "3º Horário", "4º Horário", "5º Horário", "6º Horário", "7º Horário", "8º Horário"];
+
+    // ==========================================
+    // MOTOR DA INTERFACE
+    // ==========================================
+    function atualizarRelogio() {
+        const agora = new Date();
+        const utc = agora.getTime() + (agora.getTimezoneOffset() * 60000);
+        const dataMS = new Date(utc - (3600000 * 4));
+        document.getElementById('local-clock').innerText = dataMS.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+    setInterval(atualizarRelogio, 1000); atualizarRelogio();
+
+    function toggleTheme() {
+        const b = document.body;
+        const isDark = b.getAttribute('data-theme') === 'dark';
+        if (isDark) { b.removeAttribute('data-theme'); document.querySelector('#theme-btn span').innerText = "Modo Escuro"; }
+        else { b.setAttribute('data-theme', 'dark'); document.querySelector('#theme-btn span').innerText = "Modo Claro"; }
+        // Re-alinha a bolinha azul após a transição de cor do painel
+        setTimeout(() => { const active = document.querySelector('.nav-item.active'); if(active) ativarMenu(active, null); }, 400);
+    }
+
+    function ativarMenu(item, abaId) {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const ind = document.getElementById('nav-indicator');
+        ind.style.opacity = '1';
+        
+        const ulRect = document.getElementById('nav-ul').getBoundingClientRect();
+        const liRect = item.getBoundingClientRect();
+        const centro = (liRect.left - ulRect.left) + (item.offsetWidth / 2) - 35;
+        ind.style.transform = `translateX(${centro}px)`;
+
+        if(abaId) {
+            document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+            document.getElementById(abaId).classList.add('ativa');
+            if(abaId === 'aba-minhas') carregarMinhasReservas();
+            if(abaId === 'aba-geral') carregarVisaoDia();
+        }
+    }
+
+    function irParaAba(abaId) {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('nav-indicator').style.opacity = '0';
+        document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+        document.getElementById(abaId).classList.add('ativa');
+        if(abaId === 'aba-admin') carregarReservasAdmin();
+    }
+
+    // ==========================================
+    // LÓGICA DE NEGÓCIO (FIREBASE)
+    // ==========================================
+    async function logar() {
+        const e = document.getElementById('l-email').value;
+        const p = document.getElementById('l-pass').value;
+        const btn = document.getElementById('btn-login');
+        if(!e || !p) return alert("Preencha tudo!");
+        btn.innerText = "Entrando..."; btn.disabled = true;
+        try { await auth.signInWithEmailAndPassword(e, p); } catch(err) { alert("Erro de acesso!"); btn.innerText = "Acessar Painel"; btn.disabled = false; }
+    }
+
+    auth.onAuthStateChanged(user => {
+        if(user) { userLogado = user; iniciarApp(); }
+        else { document.getElementById('section-login').style.display='flex'; document.getElementById('app-screen').style.display='none'; }
+    });
+
+    function iniciarApp() {
+        document.getElementById('section-login').style.display='none';
+        document.getElementById('app-screen').style.display='flex';
+        const nome = userLogado.email.split('@')[0];
+        document.getElementById('user-display').innerText = "Prof. " + nome;
+        document.getElementById('f-data').setAttribute('min', dataHoje);
+        if(EMAILS_ADMIN.includes(userLogado.email)) {
+            document.querySelectorAll('.btn-admin').forEach(b => b.style.display='flex');
+            document.getElementById('box-admin-nome').style.display='block';
+            document.getElementById('user-role').innerText = "Administrador";
+        }
+        ativarMenu(document.querySelector('.nav-item'), 'aba-agendar');
+    }
+
+    async function verificarHorarios() {
+        const dt = document.getElementById('f-data').value;
+        const rc = document.getElementById('f-recurso').value;
+        const grid = document.getElementById('grid-horarios');
+        if(!dt) return; grid.innerHTML = "Buscando...";
+        const snap = await db.collection("agendamentos").where("data", "==", dt).where("recurso", "==", rc).get();
+        const ocupados = []; snap.forEach(doc => ocupados.push(doc.data().horario));
+        grid.innerHTML = "";
+        HORARIOS.forEach(hr => {
+            const btn = document.createElement('button');
+            btn.className = ocupados.includes(hr) ? "slot ocupado" : "slot livre";
+            btn.innerHTML = `<span>${hr}</span><span>${ocupados.includes(hr) ? 'Ocupado' : 'Reservar'}</span>`;
+            if(!ocupados.includes(hr)) btn.onclick = () => salvar(dt, rc, hr);
+            grid.appendChild(btn);
+        });
+    }
+
+    async function salvar(dt, rc, hr) {
+        const j = document.getElementById('f-justificativa').value;
+        const o = document.getElementById('f-obs').value;
+        if(rc.includes('STE') && !j) return alert("Preencha o conteúdo!");
+        let nomeSalvar = userLogado.email.split('@')[0];
+        const nomeDigitado = document.getElementById('f-prof-admin').value;
+        if(EMAILS_ADMIN.includes(userLogado.email) && nomeDigitado) nomeSalvar = nomeDigitado;
+        if(confirm(`Confirmar ${rc} para ${hr}?`)) {
+            await db.collection("agendamentos").add({ email: userLogado.email, nome_prof: nomeSalvar, data: dt, recurso: rc, horario: hr, justificativa: j, observacao: o, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            alert("Sucesso!"); verificarHorarios();
+        }
+    }
+
+    async function carregarMinhasReservas() {
+        const tb = document.getElementById('tabela-minhas'); tb.innerHTML = "Carregando...";
+        const snap = await db.collection("agendamentos").where("email", "==", userLogado.email).where("data", ">=", dataHoje).get();
+        tb.innerHTML = snap.empty ? "Nenhuma reserva." : "";
+        snap.forEach(doc => {
+            const d = doc.data();
+            tb.innerHTML += `<tr><td>${d.data}</td><td>${d.horario}</td><td>${d.recurso}</td><td><button class="btn-danger" onclick="deletar('${doc.id}')">Remover</button></td></tr>`;
+        });
+    }
+
+    async function deletar(id) { if(confirm("Cancelar reserva?")) { await db.collection("agendamentos").doc(id).delete(); carregarMinhasReservas(); carregarReservasAdmin(); } }
+
+    async function carregarVisaoDia() {
+        const dt = document.getElementById('v-data').value;
+        const rc = document.getElementById('v-recurso').value;
+        if(!dt) return;
+        const snap = await db.collection("agendamentos").where("data", "==", dt).where("recurso", "==", rc).get();
+        const mapa = {}; snap.forEach(doc => mapa[doc.data().horario] = doc.data().nome_prof);
+        const grid = document.getElementById('grid-visao'); grid.innerHTML = "";
+        HORARIOS.forEach(hr => { grid.innerHTML += `<div class="slot ${mapa[hr] ? 'ocupado' : 'livre'}"><span>${hr}</span><span>${mapa[hr] || 'Livre'}</span></div>`; });
+    }
+
+    async function carregarReservasAdmin() {
+        const tb = document.getElementById('tabela-admin'); tb.innerHTML = "Carregando...";
+        const snap = await db.collection("agendamentos").orderBy("data").get();
+        tb.innerHTML = "";
+        snap.forEach(doc => {
+            const d = doc.data();
+            tb.innerHTML += `<tr><td>${d.nome_prof}</td><td>${d.data}</td><td>${d.horario}</td><td>${d.recurso}</td><td>${d.justificativa || '-'}</td><td><button class="btn-danger" onclick="deletar('${doc.id}')">X</button></td></tr>`;
+        });
+    }
+
+    async function exportarCSV() {
+        const snap = await db.collection("agendamentos").get();
+        let csv = "Prof;Data;Horario;Recurso\n";
+        snap.forEach(doc => { const d = doc.data(); csv += `${d.nome_prof};${d.data};${d.horario};${d.recurso}\n`; });
+        const blob = new Blob(["\ufeff"+csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Reservas.csv"; link.click();
+    }
+
+    function atualizarRegraJustificativa() {
+        const r = document.getElementById('f-recurso').value;
+        const isSTE = r.includes('STE');
+        document.getElementById('box-just').className = isSTE ? 'info-box required' : 'info-box optional';
+        document.getElementById('tit-just').innerText = isSTE ? 'Obrigatório: Conteúdo' : 'Opcional: Assunto';
+        verificarHorarios();
+    }
+
+    async function sair() { await auth.signOut(); window.location.reload(); }
+</script>
+</body>
+</html>
