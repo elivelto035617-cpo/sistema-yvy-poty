@@ -44,7 +44,7 @@
         }
 
         /* ═══════════════════════════════════════════
-           TELA DE LOGIN (NEON CORRIGIDO)
+           TELA DE LOGIN (NEON)
            ═══════════════════════════════════════════ */
         #section-login {
             position: relative; width: 90%; max-width: 380px; padding: 4px;
@@ -61,12 +61,12 @@
         .login-box { position: relative; z-index: 1; width: 100%; background: var(--bg-shell); border-radius: 20px; padding: 40px 30px; text-align: center; }
         .logo-login { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--border); margin-bottom: 20px; object-fit: cover; }
         .login-box h2 { font-family: 'Syne', sans-serif; margin-bottom: 20px; color: var(--text-primary); }
-        .input-modern { width: 100%; height: 48px; padding: 0 15px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text-primary); font-weight: 500; outline: none; margin-bottom: 12px;}
+        .input-modern { width: 100%; height: 48px; padding: 0 15px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text-primary); font-weight: 500; outline: none; margin-bottom: 12px; transition: 0.3s;}
         .input-modern:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
         .btn-neon { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent), var(--success)); color: white; font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
 
         /* ═══════════════════════════════════════════
-           ESTRUTURA DO APP (SHELL)
+           ESTRUTURA DO APP E SIDEBAR
            ═══════════════════════════════════════════ */
         #app-screen {
             display: none; flex-direction: row; width: 96%; max-width: 1360px; height: 92vh;
@@ -74,21 +74,29 @@
             box-shadow: 0 40px 80px var(--shadow-dark); border: 1px solid var(--border);
         }
 
-        .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 30px 22px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+        .sidebar {
+            width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border);
+            padding: 30px 22px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
+        }
+        
+        .mobile-top-bar { display: contents; } /* Ignorado no PC */
         .logo-escola { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-shell); margin-bottom: 20px; }
-        
-        .user-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; text-align: center; margin-bottom: 15px; overflow: hidden;}
-        /* Ajuste do nome para não cortar no Mobile */
-        .user-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--text-primary); white-space: normal; word-wrap: break-word; line-height: 1.2;}
-        
+        .user-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; text-align: center; margin-bottom: 15px; overflow: hidden; position: relative;}
+        .user-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--success)); }
+        .user-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--text-primary); white-space: normal; word-wrap: break-word; line-height: 1.2; }
         .role-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow); color: var(--accent); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-top: 6px; }
         .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 22px; font-weight: 800; color: var(--success); }
 
-        .btn-tema { display: flex; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 9px 18px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.3s; width: 100%; justify-content: center;}
+        .sidebar-buttons { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .btn-tema { display: flex; justify-content: center; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s; width: 100%; }
+        .btn-tema:hover { filter: brightness(0.9); }
+        #admin-extras { display: none; flex-direction: column; gap: 10px; width: 100%; }
 
-        /* ÁREA DE CONTEÚDO */
-        .right-area { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
-        .content-scroll { flex: 1; padding: 40px; overflow-y: auto; padding-bottom: 120px; }
+        /* ═══════════════════════════════════════════
+           ÁREA DIREITA (CONTEÚDO)
+           ═══════════════════════════════════════════ */
+        .right-area { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; background: var(--bg-shell); }
+        .content-scroll { flex: 1; padding: 40px 40px 140px 40px; overflow-y: auto; scrollbar-width: thin; }
 
         .aba { display: none; }
         .aba.ativa { display: block; animation: fadeUp 0.4s ease-out; }
@@ -116,79 +124,71 @@
         .tabela td:last-child { border-radius: 0 12px 12px 0; text-align: center; }
 
         .btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; background: rgba(239,68,68,0.12); color: var(--danger); transition: 0.2s; }
-        .btn-action:hover { background: var(--danger); color: white; }
 
         /* ═══════════════════════════════════════════
-           NAVBAR (Desktop e Mobile)
+           NAVBAR INFERIOR (CÁLCULO EXATO DE ALINHAMENTO)
            ═══════════════════════════════════════════ */
         .navbar-wrap {
             position: absolute; bottom: 0; left: 0; right: 0;
             height: 100px; display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(transparent, var(--bg-shell) 70%);
-            pointer-events: none; z-index: 100;
+            background: linear-gradient(transparent, var(--bg-shell) 70%); pointer-events: none; z-index: 100;
         }
         .navigation {
             pointer-events: auto; width: 600px; height: 72px;
             background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             border-radius: 20px; border: 1px solid var(--border);
-            box-shadow: 0 15px 35px var(--shadow-dark); display: flex; align-items: center; padding: 0 10px;
+            box-shadow: 0 15px 35px var(--shadow-dark); display: flex; align-items: center; padding: 0; margin: 0;
         }
-        .nav-ul { display: flex; width: 100%; justify-content: space-evenly; list-style: none; position: relative; }
-        .nav-item { width: 80px; height: 72px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: none; border: none; }
+        .nav-ul { display: flex; width: 100%; height: 100%; justify-content: space-evenly; align-items: center; list-style: none; position: relative; padding: 0; margin: 0; }
+        .nav-item { width: 80px; height: 100%; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: none; border: none; z-index: 2;}
         .nav-item ion-icon { font-size: 24px; color: var(--text-muted); transition: 0.4s; }
         .nav-item.active ion-icon { transform: translateY(-30px); color: #fff; }
         .nav-item span { position: absolute; font-size: 10px; font-weight: 800; color: var(--accent); opacity: 0; transform: translateY(20px); transition: 0.4s; text-transform: uppercase; }
         .nav-item.active span { opacity: 1; transform: translateY(15px); }
-        .indicator { position: absolute; top: -35px; width: 66px; height: 66px; background: var(--accent); border-radius: 50%; border: 5px solid var(--bg-shell); transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 5px 15px var(--accent-glow); }
+        
+        .indicator { position: absolute; top: -35px; width: 66px; height: 66px; background: var(--accent); border-radius: 50%; border: 5px solid var(--bg-shell); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; box-shadow: 0 5px 15px var(--accent-glow); left: 0; }
 
         /* ═══════════════════════════════════════════
-           RESPONSIVIDADE MOBILE
+           RESPONSIVIDADE MOBILE (LAYOUT HEADER E APP NAV)
            ═══════════════════════════════════════════ */
         @media (max-width: 900px) {
             body { align-items: flex-start; overflow-y: auto; }
-            #app-screen { 
-                flex-direction: column; width: 100%; height: auto; min-height: 100vh; 
-                border-radius: 0; border: none; margin: 0;
-            }
-            .sidebar { 
-                width: 100%; height: auto; flex-direction: row; padding: 15px; 
-                position: sticky; top: 0; z-index: 1000; border-right: none; 
-                border-bottom: 1px solid var(--border); justify-content: space-between; align-items: center;
-            }
-            .logo-escola { width: 50px; height: 50px; margin-bottom: 0; border-width: 2px; }
+            #app-screen { flex-direction: column; width: 100%; height: auto; min-height: 100vh; border-radius: 0; border: none; margin: 0; }
             
-            /* Ajuste do nome para não cortar no Mobile */
-            .user-card { flex: 1; margin: 0 10px; padding: 5px 10px; display: flex; align-items: center; justify-content: space-between; text-align: left; background: transparent; border: none; box-shadow: none;}
-            .user-card h3 { font-size: 14px; margin: 0; line-height: 1.1;}
-            .clock-display { font-size: 14px; margin: 0; }
-            .role-badge { display: none; } 
+            /* Novo Cabeçalho Mobile - Reorganizado! */
+            .sidebar { width: 100%; height: auto; padding: 15px; position: sticky; top: 0; z-index: 1000; border-right: none; border-bottom: 1px solid var(--border); box-shadow: 0 5px 15px var(--shadow-dark); }
             
-            .btn-tema { width: auto; padding: 8px 12px; font-size: 0;}
-            .btn-tema ion-icon { font-size: 18px; margin: 0;}
-            .btn-tema span { display: none; } /* Esconde o texto "Modo Claro" no cel */
+            .mobile-top-bar { display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 15px; }
+            .logo-escola { width: 55px; height: 55px; margin: 0; border-width: 2px; }
+            .user-card { margin: 0; flex: 1; padding: 10px 15px; display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+            .user-card::before { display: none; } /* Remove faixa colorida no mobile pra ficar mais limpo */
+            .user-card h3 { font-size: 15px; margin-bottom: 2px; }
+            .clock-display { font-size: 13px; margin: 0; }
+            .role-badge { display: none; } /* Oculto para ganhar espaço */
 
+            /* Botões do Painel se dividem em linha */
+            .sidebar-buttons { flex-direction: row; flex-wrap: wrap; }
+            .sidebar-buttons > button { flex: 1; }
+            #admin-extras { flex-direction: row; }
+            #admin-extras button { flex: 1; }
+            .btn-tema span { display: none; } /* Esconde textos grandes dos botões */
+
+            /* Área de Conteúdo */
             .right-area { width: 100%; height: auto; }
             .content-scroll { padding: 20px 15px 120px 15px; overflow-y: visible; }
-            .top-controls, .box-textos { flex-direction: column; }
+            .top-controls, .box-textos { flex-direction: column; gap: 12px; margin-bottom: 15px;}
             .grade-horarios { grid-template-columns: repeat(2, 1fr); }
 
-            /* Navbar Mobile (FIXA NO RODAPÉ) */
-            .navbar-wrap { 
-                position: fixed; bottom: 0; height: 85px; width: 100%; 
-                background: var(--nav-bg); border-top: 1px solid var(--border);
-                backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            }
-            .navigation { width: 100%; height: 100%; border-radius: 0; border: none; box-shadow: none; background: transparent; }
-            .nav-item.active ion-icon { transform: translateY(-25px); }
-            .indicator { border-color: var(--bg-root); }
+            /* Navbar Mobile (Fixada Perfeitamente) */
+            .navbar-wrap { position: fixed; bottom: 0; height: 85px; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border); }
+            .navigation { width: 100%; height: 100%; border-radius: 0; border: none; box-shadow: none; background: transparent; padding: 0;}
+            .indicator { border-color: var(--bg-root); top: -25px; width: 60px; height: 60px;}
+            .nav-item.active ion-icon { transform: translateY(-20px); }
+            .nav-item.active span { transform: translateY(12px); font-size: 9px;}
         }
         
-        @media (max-width: 400px) {
-            .user-card h3 { font-size: 12px; }
-            .clock-display { font-size: 12px; }
-        }
         *, *::before, *::after { transition: background-color 0.3s, border-color 0.3s, color 0.3s; }
-        .slot, .nav-item ion-icon, .indicator { transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .slot { transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body data-theme="dark">
@@ -206,25 +206,25 @@
 <div id="app-screen">
     
     <div class="sidebar">
-        <img src="logo.jpg" alt="Logo" class="logo-escola" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
-        <div class="user-card">
-            <div>
+        <div class="mobile-top-bar">
+            <img src="logo.jpg" alt="Logo" class="logo-escola" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff&size=130&bold=true&rounded=true'">
+            <div class="user-card">
                 <h3 id="user-display">Carregando...</h3>
                 <span class="role-badge" id="user-role"><ion-icon name="person-outline"></ion-icon> Professor</span>
+                <div class="clock-display" id="local-clock">00:00</div>
             </div>
-            <div class="clock-display" id="local-clock">00:00</div>
         </div>
         
-        <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
-            <button class="btn-tema" id="theme-btn" onclick="toggleTheme()" title="Mudar Tema">
-                <ion-icon name="sunny-outline"></ion-icon> <span>Modo Claro</span>
+        <div class="sidebar-buttons">
+            <button class="btn-tema" id="theme-btn" onclick="toggleTheme()" title="Modo Claro/Escuro">
+                <ion-icon name="sunny-outline" style="font-size:18px"></ion-icon> <span>Modo Claro</span>
             </button>
-            <div id="admin-extras" style="display: none; width: 100%;">
-                <button class="btn-tema" onclick="irParaAba('aba-admin')" style="background: var(--warning); color: white; border-color: var(--warning);">
-                    <ion-icon name="shield-checkmark-outline"></ion-icon> <span>Painel Admin</span>
+            <div id="admin-extras">
+                <button class="btn-tema" onclick="irParaAba('aba-admin')" style="background: var(--warning); color: white; border-color: var(--warning);" title="Painel Admin">
+                    <ion-icon name="shield-checkmark-outline" style="font-size:18px"></ion-icon> <span>Painel Admin</span>
                 </button>
-                <button class="btn-tema" onclick="exportarCSV()" style="background: var(--success); color: white; border-color: var(--success); margin-top: 10px;">
-                    <ion-icon name="cloud-download-outline"></ion-icon> <span>Baixar Excel</span>
+                <button class="btn-tema" onclick="exportarCSV()" style="background: var(--success); color: white; border-color: var(--success);" title="Baixar Planilha">
+                    <ion-icon name="cloud-download-outline" style="font-size:18px"></ion-icon> <span>Baixar Excel</span>
                 </button>
             </div>
         </div>
@@ -395,19 +395,27 @@
         const isDark = b.getAttribute('data-theme') === 'dark';
         if (isDark) { b.removeAttribute('data-theme'); document.querySelector('#theme-btn span').innerText = "Modo Escuro"; }
         else { b.setAttribute('data-theme', 'dark'); document.querySelector('#theme-btn span').innerText = "Modo Claro"; }
-        setTimeout(() => { const active = document.querySelector('.nav-item.active'); if(active) ativarMenu(active, null); }, 400);
+        setTimeout(alinharIndicador, 400);
     }
+
+    // ALINHAMENTO MATEMÁTICO DA BOLINHA AZUL
+    function alinharIndicador() {
+        const item = document.querySelector('.nav-item.active');
+        if(!item) return;
+        const ind = document.getElementById('nav-indicator');
+        const ulRect = document.getElementById('nav-ul').getBoundingClientRect();
+        const liRect = item.getBoundingClientRect();
+        const offset = (liRect.left - ulRect.left) + (liRect.width / 2) - (ind.offsetWidth / 2);
+        ind.style.transform = `translateX(${offset}px)`;
+        ind.style.opacity = '1';
+    }
+    // Garante que a bolinha acompanha se o professor virar a tela do celular
+    window.addEventListener('resize', alinharIndicador);
 
     function ativarMenu(item, abaId) {
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
-        const ind = document.getElementById('nav-indicator');
-        ind.style.opacity = '1';
-        
-        const ulRect = document.getElementById('nav-ul').getBoundingClientRect();
-        const liRect = item.getBoundingClientRect();
-        const centro = (liRect.left - ulRect.left) + (item.offsetWidth / 2) - 33;
-        ind.style.transform = `translateX(${centro}px)`;
+        alinharIndicador(); // Chama a nova função precisa
 
         if(abaId) {
             document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
@@ -452,12 +460,12 @@
         document.getElementById('f-data').setAttribute('min', dataHoje);
 
         if(EMAILS_ADMIN.includes(userLogado.email)) {
-            document.getElementById('admin-extras').style.display = 'block';
+            document.getElementById('admin-extras').style.display = 'flex';
             document.getElementById('box-admin-nome').style.display = 'block';
             document.getElementById('user-role').innerHTML = '<ion-icon name="shield-checkmark-outline"></ion-icon> Admin';
         }
         
-        ativarMenu(document.querySelector('.nav-item'), 'aba-agendar');
+        setTimeout(() => ativarMenu(document.querySelector('.nav-item'), 'aba-agendar'), 100);
         resetarTimerInatividade();
     }
 
@@ -522,14 +530,13 @@
         }
     }
 
+    // CORREÇÃO: Busca as reservas e filtra no próprio app para evitar erro de índice no Firebase
     async function carregarMinhasReservas() {
         const tb = document.getElementById('tabela-minhas'); 
         tb.innerHTML = "<tr><td colspan='4'>Carregando suas reservas...</td></tr>";
         
-        // Busca TODAS as reservas deste professor (Solução para evitar o erro de index no Firebase)
         const snap = await db.collection("agendamentos").where("email_prof", "==", userLogado.email).get();
         
-        // Filtra pelo JavaScript as reservas com datas maiores ou iguais a hoje e ordena
         let reservas = [];
         snap.forEach(doc => {
             if (doc.data().data >= dataHoje) {
@@ -537,7 +544,7 @@
             }
         });
         
-        reservas.sort((a, b) => a.data.localeCompare(b.data)); // Organiza por data
+        reservas.sort((a, b) => a.data.localeCompare(b.data)); 
         
         tb.innerHTML = "";
         if(reservas.length === 0) {
@@ -584,7 +591,7 @@
             await db.collection("agendamentos").doc(id).delete(); 
             carregarMinhasReservas(); 
             carregarReservasAdmin(); 
-            verificarHorarios(); // Atualiza a tela 1 se estiver nela
+            verificarHorarios(); 
         } 
     }
 
