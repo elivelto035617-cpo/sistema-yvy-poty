@@ -16,12 +16,10 @@
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <style>
-        /* ═══════════════════════════════════════════
-           SISTEMA DE TOKENS E TEMA
-           ═══════════════════════════════════════════ */
+        /* TOKENS E TEMA */
         :root {
-            --accent: #3b82f6; --accent-deep: #1d4ed8; --accent-glow: rgba(59,130,246,0.25);
-            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --primary: #1a73e8;
+            --accent: #3b82f6; --accent-glow: rgba(59,130,246,0.35);
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
             --bg-root: #f0f4ff; --bg-shell: #ffffff; --bg-sidebar: #fafbff; --bg-card: #f5f7ff;
             --bg-input: #eef1fb; --text-primary: #0f172a; --text-secondary: #475569;
             --text-muted: #94a3b8; --border: rgba(148,163,184,0.25);
@@ -36,159 +34,116 @@
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-root); color: var(--text-primary); min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
 
-        body {
-            font-family: 'DM Sans', sans-serif; background: var(--bg-root);
-            min-height: 100vh; display: flex; justify-content: center; align-items: center;
-            overflow-x: hidden; overflow-y: auto; color: var(--text-primary); transition: background 0.5s ease;
-        }
-
-        /* ═══════════════════════════════════════════
-           TELA DE LOGIN (NEON)
-           ═══════════════════════════════════════════ */
+        /* TELA LOGIN NEON */
         #section-login {
             position: relative; width: 90%; max-width: 380px; padding: 4px;
             background: #111; border-radius: 24px; overflow: hidden; display: flex; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.7); z-index: 1000;
         }
-        #section-login::before {
-            content: ""; position: absolute; inset: -50%;
-            background: conic-gradient(from 0deg, var(--accent), var(--success), var(--accent));
-            animation: spin 4s linear infinite;
-        }
+        #section-login::before { content: ""; position: absolute; inset: -50%; background: conic-gradient(from 0deg, var(--accent), var(--success), var(--accent)); animation: spin 4s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
         .login-box { position: relative; z-index: 1; width: 100%; background: var(--bg-shell); border-radius: 20px; padding: 40px 30px; text-align: center; }
         .logo-login { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--border); margin-bottom: 20px; object-fit: cover; }
-        .login-box h2 { font-family: 'Syne', sans-serif; margin-bottom: 20px; color: var(--text-primary); }
+        .login-box h2 { font-family: 'Syne', sans-serif; margin-bottom: 20px; font-weight: 800;}
         .input-modern { width: 100%; height: 48px; padding: 0 15px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text-primary); font-weight: 500; outline: none; margin-bottom: 12px; transition: 0.3s;}
         .input-modern:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
         .btn-neon { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent), var(--success)); color: white; font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
 
-        /* ═══════════════════════════════════════════
-           ESTRUTURA DO APP E SIDEBAR
-           ═══════════════════════════════════════════ */
-        #app-screen {
-            display: none; flex-direction: row; width: 96%; max-width: 1360px; height: 92vh;
-            background: var(--bg-shell); border-radius: 28px; overflow: hidden;
-            box-shadow: 0 40px 80px var(--shadow-dark); border: 1px solid var(--border);
-        }
+        /* SHELL */
+        #app-screen { display: none; flex-direction: row; width: 96%; max-width: 1360px; height: 92vh; background: var(--bg-shell); border-radius: 28px; overflow: hidden; box-shadow: 0 40px 80px var(--shadow-dark); border: 1px solid var(--border); }
 
-        .sidebar {
-            width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border);
-            padding: 30px 22px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
-        }
-        
-        .mobile-top-bar { display: contents; } /* Ignorado no PC */
+        /* SIDEBAR E BOTÕES */
+        .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 30px 22px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; position: relative;}
+        .mobile-top-bar { display: contents; }
         .logo-escola { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-shell); margin-bottom: 20px; }
-        .user-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; text-align: center; margin-bottom: 15px; overflow: hidden; position: relative;}
+        .user-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; text-align: center; margin-bottom: 15px; position: relative; overflow: hidden;}
         .user-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--success)); }
-        .user-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--text-primary); white-space: normal; word-wrap: break-word; line-height: 1.2; }
-        .role-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow); color: var(--accent); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-top: 6px; }
-        .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 22px; font-weight: 800; color: var(--success); }
-
+        .user-card h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: bold; white-space: normal; word-wrap: break-word; line-height: 1.2; margin-bottom: 5px;}
+        .role-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow); color: var(--accent); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase;}
+        .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 20px; font-weight: 800; color: var(--success); }
+        
         .sidebar-buttons { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        
         .btn-tema { display: flex; justify-content: center; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s; width: 100%; }
         .btn-tema:hover { filter: brightness(0.9); }
+        
         #admin-extras { display: none; flex-direction: column; gap: 10px; width: 100%; }
 
-        /* ═══════════════════════════════════════════
-           ÁREA DIREITA (CONTEÚDO)
-           ═══════════════════════════════════════════ */
+        /* ÁREA DIREITA E FORMULÁRIOS */
         .right-area { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; background: var(--bg-shell); }
-        .content-scroll { flex: 1; padding: 40px 40px 140px 40px; overflow-y: auto; scrollbar-width: thin; }
-
-        .aba { display: none; }
-        .aba.ativa { display: block; animation: fadeUp 0.4s ease-out; }
+        .content-scroll { flex: 1; padding: 40px; overflow-y: auto; padding-bottom: 120px; scrollbar-width: thin; scrollbar-color: var(--border) transparent;}
+        .aba { display: none; } .aba.ativa { display: block; animation: fadeUp 0.4s ease-out; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
+        .section-header h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 20px;}
         .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        
         .top-controls { display: flex; gap: 15px; margin-bottom: 20px; }
         .control-group { flex: 1; }
-        .field-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .field-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px;}
         
         .box-textos { display: flex; gap: 15px; margin-bottom: 20px; }
         .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid transparent; }
         .info-box.required { border-color: rgba(239,68,68,0.3); }
+        .info-box.optional { border-color: rgba(59,130,246,0.3); }
 
         .grade-horarios { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .slot { padding: 15px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer; border: none; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 4px 10px var(--shadow-dark); }
+        .slot { padding: 15px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer; border: none; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 4px 10px var(--shadow-dark); transition: 0.2s;}
         .slot.livre { background: linear-gradient(135deg, #059669, #10b981); color: white; }
         .slot.ocupado { background: var(--bg-input); color: var(--text-muted); border: 1px solid var(--border); cursor: not-allowed; }
 
-        .table-wrapper { overflow-x: auto; }
         .tabela { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
         .tabela th { padding: 10px 15px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
         .tabela td { padding: 15px; background: var(--bg-input); font-size: 14px; }
         .tabela td:first-child { border-radius: 12px 0 0 12px; font-weight: bold; color: var(--accent); }
         .tabela td:last-child { border-radius: 0 12px 12px 0; text-align: center; }
-
-        .btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; background: rgba(239,68,68,0.12); color: var(--danger); transition: 0.2s; }
-
-        /* ═══════════════════════════════════════════
-           NAVBAR INFERIOR (CÁLCULO EXATO DE ALINHAMENTO)
-           ═══════════════════════════════════════════ */
-        .navbar-wrap {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            height: 100px; display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(transparent, var(--bg-shell) 70%); pointer-events: none; z-index: 100;
-        }
-        .navigation {
-            pointer-events: auto; width: 600px; height: 72px;
-            background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border-radius: 20px; border: 1px solid var(--border);
-            box-shadow: 0 15px 35px var(--shadow-dark); display: flex; align-items: center; padding: 0; margin: 0;
-        }
-        .nav-ul { display: flex; width: 100%; height: 100%; justify-content: space-evenly; align-items: center; list-style: none; position: relative; padding: 0; margin: 0; }
-        .nav-item { width: 80px; height: 100%; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: none; border: none; z-index: 2;}
-        .nav-item ion-icon { font-size: 24px; color: var(--text-muted); transition: 0.4s; }
-        .nav-item.active ion-icon { transform: translateY(-30px); color: #fff; }
-        .nav-item span { position: absolute; font-size: 10px; font-weight: 800; color: var(--accent); opacity: 0; transform: translateY(20px); transition: 0.4s; text-transform: uppercase; }
-        .nav-item.active span { opacity: 1; transform: translateY(15px); }
         
-        .indicator { position: absolute; top: -35px; width: 66px; height: 66px; background: var(--accent); border-radius: 50%; border: 5px solid var(--bg-shell); transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; box-shadow: 0 5px 15px var(--accent-glow); left: 0; }
+        .btn-action { padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer; background: rgba(239,68,68,0.12); color: var(--danger); font-size: 16px; transition: 0.2s;}
+        .btn-action:hover { background: var(--danger); color: white;}
 
-        /* ═══════════════════════════════════════════
-           RESPONSIVIDADE MOBILE (LAYOUT HEADER E APP NAV)
-           ═══════════════════════════════════════════ */
+        /* NAVBAR PÍLULA */
+        .navbar-wrap { position: absolute; bottom: 0; left: 0; right: 0; height: 100px; display: flex; justify-content: center; align-items: center; background: linear-gradient(transparent, var(--bg-shell) 70%); pointer-events: none; }
+        .navigation { pointer-events: auto; width: 550px; height: 72px; background: var(--nav-bg); backdrop-filter: blur(20px); border-radius: 22px; border: 1px solid var(--border); box-shadow: 0 16px 48px var(--shadow-dark); display: flex; align-items: center; padding: 0 10px; }
+        .nav-ul { display: flex; width: 100%; justify-content: space-evenly; list-style: none; margin: 0; padding: 0;}
+        .nav-item { width: 100px; height: 56px; border-radius: 14px; cursor: pointer; border: none; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; gap: 2px; }
+        .nav-item.active { background: var(--accent); box-shadow: 0 6px 20px var(--accent-glow); }
+        .nav-item ion-icon { font-size: 22px; color: var(--text-muted); }
+        .nav-item.active ion-icon { color: #fff; }
+        .nav-item span { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
+        .nav-item.active span { color: rgba(255,255,255,0.9); }
+
+        /* RESPONSIVIDADE (MOBILE) */
         @media (max-width: 900px) {
-            body { align-items: flex-start; overflow-y: auto; }
-            #app-screen { flex-direction: column; width: 100%; height: auto; min-height: 100vh; border-radius: 0; border: none; margin: 0; }
-            
-            /* Novo Cabeçalho Mobile - Reorganizado! */
-            .sidebar { width: 100%; height: auto; padding: 15px; position: sticky; top: 0; z-index: 1000; border-right: none; border-bottom: 1px solid var(--border); box-shadow: 0 5px 15px var(--shadow-dark); }
+            #app-screen { flex-direction: column; width: 100%; height: auto; min-height: 100vh; border-radius: 0; border: none; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; border-right: none; border-bottom: 1px solid var(--border); box-shadow: 0 4px 20px var(--shadow-dark); }
             
             .mobile-top-bar { display: flex; width: 100%; align-items: center; gap: 15px; margin-bottom: 15px; }
             .logo-escola { width: 55px; height: 55px; margin: 0; border-width: 2px; }
-            .user-card { margin: 0; flex: 1; padding: 10px 15px; display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
-            .user-card::before { display: none; } /* Remove faixa colorida no mobile pra ficar mais limpo */
-            .user-card h3 { font-size: 15px; margin-bottom: 2px; }
+            .user-card { margin: 0; flex: 1; padding: 8px 12px; display: flex; flex-direction: column; align-items: flex-start; text-align: left; background: transparent; border: none;}
+            .user-card::before { display: none; }
+            .user-card h3 { font-size: 15px; margin: 0; line-height: 1.1; }
             .clock-display { font-size: 13px; margin: 0; }
-            .role-badge { display: none; } /* Oculto para ganhar espaço */
+            .role-badge { display: none; }
 
-            /* Botões do Painel se dividem em linha */
             .sidebar-buttons { flex-direction: row; flex-wrap: wrap; }
-            .sidebar-buttons > button { flex: 1; }
+            .sidebar-buttons > button { flex: 1; padding: 12px 0; }
             #admin-extras { flex-direction: row; }
-            #admin-extras button { flex: 1; }
-            .btn-tema span { display: none; } /* Esconde textos grandes dos botões */
-
-            /* Área de Conteúdo */
+            #admin-extras button { flex: 1; padding: 12px 0;}
+            .btn-tema span { display: none; } 
+            .btn-tema ion-icon { font-size: 20px; margin: 0; }
+            
             .right-area { width: 100%; height: auto; }
             .content-scroll { padding: 20px 15px 120px 15px; overflow-y: visible; }
-            .top-controls, .box-textos { flex-direction: column; gap: 12px; margin-bottom: 15px;}
+            .top-controls, .box-textos { flex-direction: column; gap: 12px;}
             .grade-horarios { grid-template-columns: repeat(2, 1fr); }
 
-            /* Navbar Mobile (Fixada Perfeitamente) */
             .navbar-wrap { position: fixed; bottom: 0; height: 85px; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border); }
             .navigation { width: 100%; height: 100%; border-radius: 0; border: none; box-shadow: none; background: transparent; padding: 0;}
-            .indicator { border-color: var(--bg-root); top: -25px; width: 60px; height: 60px;}
-            .nav-item.active ion-icon { transform: translateY(-20px); }
-            .nav-item.active span { transform: translateY(12px); font-size: 9px;}
+            .nav-item { width: 25%; }
         }
-        
         *, *::before, *::after { transition: background-color 0.3s, border-color 0.3s, color 0.3s; }
-        .slot { transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body data-theme="dark">
@@ -220,10 +175,10 @@
                 <ion-icon name="sunny-outline" style="font-size:18px"></ion-icon> <span>Modo Claro</span>
             </button>
             <div id="admin-extras">
-                <button class="btn-tema" onclick="irParaAba('aba-admin')" style="background: var(--warning); color: white; border-color: var(--warning);" title="Painel Admin">
+                <button class="btn-tema" onclick="irParaAba('aba-admin')" style="background: var(--warning); color: #fff; border: none;" title="Painel Admin">
                     <ion-icon name="shield-checkmark-outline" style="font-size:18px"></ion-icon> <span>Painel Admin</span>
                 </button>
-                <button class="btn-tema" onclick="exportarCSV()" style="background: var(--success); color: white; border-color: var(--success);" title="Baixar Planilha">
+                <button class="btn-tema" onclick="exportarCSV()" style="background: var(--success); color: #fff; border: none;" title="Baixar Planilha">
                     <ion-icon name="cloud-download-outline" style="font-size:18px"></ion-icon> <span>Baixar Excel</span>
                 </button>
             </div>
@@ -234,7 +189,7 @@
         <div class="content-scroll">
 
             <div id="aba-agendar" class="aba ativa">
-                <h2 style="font-family: 'Syne'; margin-bottom: 20px;">01. Agendar Recurso</h2>
+                <div class="section-header"><h2 style="font-family: 'Syne';">01. Agendar Recurso</h2></div>
                 <div class="panel">
                     <div class="top-controls">
                         <div class="control-group">
@@ -261,26 +216,26 @@
                         </div>
                         <div class="control-group" id="box-admin-nome" style="display:none">
                             <label class="field-label" style="color:var(--warning)">Reservar para Prof:</label>
-                            <input type="text" id="f-prof-admin" class="input-modern" placeholder="Nome do Professor">
+                            <input type="text" id="f-prof-admin" class="input-modern" placeholder="Nome do Professor" style="border-color:var(--warning)">
                         </div>
                     </div>
                     <div class="box-textos">
                         <div id="box-just" class="info-box required">
-                            <label id="tit-just" class="field-label">Obrigatório: Conteúdo</label>
+                            <label id="tit-just" class="field-label" style="color:var(--danger)">Obrigatório: Conteúdo da Aula</label>
                             <input type="text" id="f-justificativa" class="input-modern" placeholder="Assunto da aula...">
                         </div>
                         <div class="info-box optional">
-                            <label class="field-label">Observação</label>
+                            <label class="field-label" style="color:var(--accent)">Opcional: Observação</label>
                             <input type="text" id="f-obs" class="input-modern" placeholder="Opcional">
                         </div>
                     </div>
                     <div class="grade-label">Horários Disponíveis</div>
-                    <div class="grade-horarios" id="grid-horarios">Selecione uma data para ver...</div>
+                    <div class="grade-horarios" id="grid-horarios">Selecione uma data permitida para ver os horários.</div>
                 </div>
             </div>
 
             <div id="aba-geral" class="aba">
-                <h2 style="font-family: 'Syne'; margin-bottom: 20px;">02. Visão do Dia</h2>
+                <div class="section-header"><h2 style="font-family: 'Syne';">02. Visão do Dia</h2></div>
                 <div class="panel">
                     <div class="top-controls">
                         <div class="control-group"><input type="date" id="v-data" class="input-modern" onchange="carregarVisaoDia()"></div>
@@ -298,24 +253,24 @@
             </div>
 
             <div id="aba-minhas" class="aba">
-                <h2 style="font-family: 'Syne'; margin-bottom: 20px;">03. Minhas Reservas</h2>
+                <div class="section-header"><h2 style="font-family: 'Syne';">03. Minhas Reservas</h2></div>
                 <div class="panel">
                     <div class="table-wrapper">
                         <table class="tabela">
                             <thead><tr><th>Data</th><th>Horário</th><th>Recurso</th><th style="text-align:center">Ação</th></tr></thead>
-                            <tbody id="tabela-minhas"></tbody>
+                            <tbody id="tabela-minhas"><tr><td colspan="4" style="text-align:center">Carregando...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
             <div id="aba-admin" class="aba">
-                <h2 style="font-family: 'Syne'; color: var(--warning); margin-bottom: 20px;">Painel Geral Admin</h2>
+                <div class="section-header"><h2 style="font-family: 'Syne'; color: var(--warning);">Painel Geral Admin</h2></div>
                 <div class="panel">
                     <div class="table-wrapper">
                         <table class="tabela">
                             <thead><tr><th>Professor</th><th>Data</th><th>Horário</th><th>Recurso</th><th style="text-align:center">Ação</th></tr></thead>
-                            <tbody id="tabela-admin"></tbody>
+                            <tbody id="tabela-admin"><tr><td colspan="5" style="text-align:center">Acesso restrito.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -325,11 +280,18 @@
         <div class="navbar-wrap">
             <nav class="navigation">
                 <ul class="nav-ul" id="nav-ul">
-                    <li class="nav-item active" onclick="ativarMenu(this, 'aba-agendar')"><a><ion-icon name="add-circle-outline"></ion-icon><span>Agendar</span></a></li>
-                    <li class="nav-item" onclick="ativarMenu(this, 'aba-geral')"><a><ion-icon name="grid-outline"></ion-icon><span>Ver Dia</span></a></li>
-                    <li class="nav-item" onclick="ativarMenu(this, 'aba-minhas')"><a><ion-icon name="bookmark-outline"></ion-icon><span>Minhas</span></a></li>
-                    <li class="nav-item" onclick="sair()"><a><ion-icon name="log-out-outline"></ion-icon><span>Sair</span></a></li>
-                    <div class="indicator" id="nav-indicator"></div>
+                    <button class="nav-item active" onclick="ativarMenu(this, 'aba-agendar')">
+                        <ion-icon name="add-circle-outline"></ion-icon><span>Agendar</span>
+                    </button>
+                    <button class="nav-item" onclick="ativarMenu(this, 'aba-geral')">
+                        <ion-icon name="grid-outline"></ion-icon><span>Ver Dia</span>
+                    </button>
+                    <button class="nav-item" onclick="ativarMenu(this, 'aba-minhas')">
+                        <ion-icon name="bookmark-outline"></ion-icon><span>Minhas</span>
+                    </button>
+                    <button class="nav-item" onclick="sair()">
+                        <ion-icon name="log-out-outline"></ion-icon><span>Sair</span>
+                    </button>
                 </ul>
             </nav>
         </div>
@@ -338,17 +300,16 @@
 
 <script>
     // ==========================================
-    // CONFIGURAÇÕES FIREBASE (Preencha Aqui)
+    // CONFIGURAÇÕES FIREBASE
     // ==========================================
-    const firebaseConfig = {
-         apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
+    const firebaseConfig = {apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
   authDomain: "sistema-yvypoty.firebaseapp.com",
   projectId: "sistema-yvypoty",
   storageBucket: "sistema-yvypoty.firebasestorage.app",
   messagingSenderId: "16311833355",
   appId: "1:16311833355:web:9bd545655745428e4fc80e",
   measurementId: "G-DR0459S4S3"
-  };
+    };
     
     const EMAILS_ADMIN = ['eliveltonarandu@gmail.com', 'davivilhalva@gmail.com']; 
 
@@ -377,11 +338,8 @@
 
     let userLogado = null;
     let dataHoje = new Date().toISOString().split('T')[0];
-    const HORARIOS = ["1º Horário", "2º Horário", "3º Horário", "4º Horário", "5º Horário", "6º Horário", "7º Horário", "8º Horário"];
+    const HORARIOS = ["1º Aula", "2º Aula", "3º Aula", "4º Aula", "5º Aula", "6º Aula", "7º Aula", "8º Aula"];
 
-    // ==========================================
-    // MOTOR DA INTERFACE E NAVEGAÇÃO
-    // ==========================================
     function atualizarRelogio() {
         const agora = new Date();
         const utc = agora.getTime() + (agora.getTimezoneOffset() * 60000);
@@ -392,51 +350,52 @@
 
     function toggleTheme() {
         const b = document.body;
-        const isDark = b.getAttribute('data-theme') === 'dark';
-        if (isDark) { b.removeAttribute('data-theme'); document.querySelector('#theme-btn span').innerText = "Modo Escuro"; }
-        else { b.setAttribute('data-theme', 'dark'); document.querySelector('#theme-btn span').innerText = "Modo Claro"; }
-        setTimeout(alinharIndicador, 400);
-    }
-
-    // ALINHAMENTO MATEMÁTICO DA BOLINHA AZUL
-    function alinharIndicador() {
-        const item = document.querySelector('.nav-item.active');
-        if(!item) return;
-        const ind = document.getElementById('nav-indicator');
-        const ulRect = document.getElementById('nav-ul').getBoundingClientRect();
-        const liRect = item.getBoundingClientRect();
-        const offset = (liRect.left - ulRect.left) + (liRect.width / 2) - (ind.offsetWidth / 2);
-        ind.style.transform = `translateX(${offset}px)`;
-        ind.style.opacity = '1';
-    }
-    // Garante que a bolinha acompanha se o professor virar a tela do celular
-    window.addEventListener('resize', alinharIndicador);
-
-    function ativarMenu(item, abaId) {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        alinharIndicador(); // Chama a nova função precisa
-
-        if(abaId) {
-            document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-            document.getElementById(abaId).classList.add('ativa');
-            if(abaId === 'aba-minhas') carregarMinhasReservas();
-            if(abaId === 'aba-geral') carregarVisaoDia();
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        const btnText = document.querySelector('#theme-btn span');
+        const icon = document.querySelector('#theme-btn ion-icon');
+        if (b.getAttribute('data-theme') === 'dark') {
+            b.removeAttribute('data-theme');
+            icon.name = 'moon-outline'; 
+            if(btnText) btnText.innerText = 'Modo Escuro';
+        } else {
+            b.setAttribute('data-theme', 'dark');
+            icon.name = 'sunny-outline'; 
+            if(btnText) btnText.innerText = 'Modo Claro';
         }
+    }
+
+    function ativarMenu(btnClicado, abaId) {
+        if(btnClicado) {
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btnClicado.classList.add('active');
+        }
+        document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+        document.getElementById(abaId).classList.add('ativa');
+
+        if(abaId === 'aba-minhas') carregarMinhasReservas();
+        if(abaId === 'aba-geral') carregarVisaoDia();
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
     }
 
     function irParaAba(abaId) {
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById('nav-indicator').style.opacity = '0';
         document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
         document.getElementById(abaId).classList.add('ativa');
         if(abaId === 'aba-admin') carregarReservasAdmin();
     }
 
-    // ==========================================
-    // FIREBASE: LOGICA E REGRAS
-    // ==========================================
+    function atualizarRegraJustificativa() {
+        const recurso = document.getElementById('f-recurso').value;
+        const box = document.getElementById('box-just');
+        if (recurso.includes('STE')) {
+            box.className = 'info-box required';
+            document.getElementById('tit-just').innerText = 'Obrigatório: Conteúdo da Aula';
+        } else {
+            box.className = 'info-box optional';
+            document.getElementById('tit-just').innerText = 'Opcional: Observação';
+        }
+        verificarHorarios();
+    }
+
     async function logar() {
         const e = document.getElementById('l-email').value;
         const p = document.getElementById('l-pass').value;
@@ -465,7 +424,7 @@
             document.getElementById('user-role').innerHTML = '<ion-icon name="shield-checkmark-outline"></ion-icon> Admin';
         }
         
-        setTimeout(() => ativarMenu(document.querySelector('.nav-item'), 'aba-agendar'), 100);
+        ativarMenu(document.querySelector('.nav-item'), 'aba-agendar');
         resetarTimerInatividade();
     }
 
@@ -475,19 +434,11 @@
         const grid = document.getElementById('grid-horarios');
         if(!dt) return;
 
-        // TRAVA DIA 26
         const hoje = new Date();
-        const diaH = hoje.getDate();
-        const mesH = hoje.getMonth() + 1;
-        const anoH = hoje.getFullYear();
-        const p = dt.split('-');
-        const isFuturo = (p[0] > anoH) || (p[0] == anoH && p[1] > mesH);
-        
-        if (isFuturo && diaH < 26) {
-            alert("Agenda do mês seguinte só libera no dia 26!");
-            document.getElementById('f-data').value = ""; 
-            grid.innerHTML = "Selecione uma data válida...";
-            return;
+        const isFuturo = (dt.split('-')[0] > hoje.getFullYear()) || (dt.split('-')[0] == hoje.getFullYear() && dt.split('-')[1] > hoje.getMonth() + 1);
+        if (isFuturo && hoje.getDate() < 26) {
+            alert("A agenda do mês seguinte só é liberada a partir do dia 26!");
+            document.getElementById('f-data').value = ""; grid.innerHTML = "Selecione uma data permitida para ver os horários."; return;
         }
 
         grid.innerHTML = "Buscando...";
@@ -514,87 +465,51 @@
         if(EMAILS_ADMIN.includes(userLogado.email) && nomeDigitado) nomeSalvar = nomeDigitado;
 
         if(confirm(`Confirmar ${rc} para ${hr}?`)) {
-            await db.collection("agendamentos").add({ 
-                email_prof: userLogado.email, 
-                nome_prof: nomeSalvar, 
-                data: dt, 
-                recurso: rc, 
-                horario: hr, 
-                justificativa: j, 
-                observacao: o, 
-                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
-            });
+            await db.collection("agendamentos").add({ email_prof: userLogado.email, nome_prof: nomeSalvar, data: dt, recurso: rc, horario: hr, justificativa: j, observacao: o, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
             alert("Agendado com sucesso!"); 
-            document.getElementById('f-justificativa').value = "";
+            document.getElementById('f-justificativa').value = ""; document.getElementById('f-obs').value = "";
             verificarHorarios();
         }
     }
 
-    // CORREÇÃO: Busca as reservas e filtra no próprio app para evitar erro de índice no Firebase
     async function carregarMinhasReservas() {
-        const tb = document.getElementById('tabela-minhas'); 
-        tb.innerHTML = "<tr><td colspan='4'>Carregando suas reservas...</td></tr>";
-        
+        const tb = document.getElementById('tabela-minhas'); tb.innerHTML = "<tr><td colspan='4' style='text-align:center'>Buscando...</td></tr>";
         const snap = await db.collection("agendamentos").where("email_prof", "==", userLogado.email).get();
-        
         let reservas = [];
-        snap.forEach(doc => {
-            if (doc.data().data >= dataHoje) {
-                reservas.push({ id: doc.id, ...doc.data() });
-            }
-        });
-        
+        snap.forEach(doc => { if (doc.data().data >= dataHoje) reservas.push({ id: doc.id, ...doc.data() }); });
         reservas.sort((a, b) => a.data.localeCompare(b.data)); 
         
         tb.innerHTML = "";
-        if(reservas.length === 0) {
-            tb.innerHTML = "<tr><td colspan='4'>Você não tem agendamentos futuros.</td></tr>";
-            return;
-        }
-
+        if(reservas.length === 0) { tb.innerHTML = "<tr><td colspan='4' style='text-align:center'>Você não tem agendamentos futuros.</td></tr>"; return; }
         reservas.forEach(d => {
             const dataBr = d.data.split('-').reverse().join('/');
-            tb.innerHTML += `<tr>
-                <td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td>
-                <td style="text-align: center;"><button class="btn-action" onclick="deletar('${d.id}')"><ion-icon name="trash-outline"></ion-icon></button></td>
-            </tr>`;
+            tb.innerHTML += `<tr><td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td><td style="text-align:center"><button class="btn-action" onclick="deletar('${d.id}')"><ion-icon name="trash-outline"></ion-icon></button></td></tr>`;
         });
     }
 
     async function carregarVisaoDia() {
         const dt = document.getElementById('v-data').value;
         const rc = document.getElementById('v-recurso').value;
-        if(!dt) return;
+        const grid = document.getElementById('grid-visao');
+        if(!dt) return; grid.innerHTML = "Carregando...";
         const snap = await db.collection("agendamentos").where("data", "==", dt).where("recurso", "==", rc).get();
         const mapa = {}; snap.forEach(doc => mapa[doc.data().horario] = doc.data().nome_prof);
-        const grid = document.getElementById('grid-visao'); grid.innerHTML = "";
+        grid.innerHTML = "";
         HORARIOS.forEach(hr => { grid.innerHTML += `<div class="slot ${mapa[hr] ? 'ocupado' : 'livre'}"><span>${hr}</span><span>${mapa[hr] || 'Livre'}</span></div>`; });
     }
 
     async function carregarReservasAdmin() {
-        const tb = document.getElementById('tabela-admin'); tb.innerHTML = "<tr><td colspan='5'>Carregando tudo...</td></tr>";
+        const tb = document.getElementById('tabela-admin'); tb.innerHTML = "<tr><td colspan='5' style='text-align:center'>Carregando tudo...</td></tr>";
         const snap = await db.collection("agendamentos").orderBy("data").get(); 
         tb.innerHTML = "";
-        if(snap.empty) tb.innerHTML = "<tr><td colspan='5'>Nenhuma reserva.</td></tr>";
-        
+        if(snap.empty) { tb.innerHTML = "<tr><td colspan='5' style='text-align:center'>Nenhuma reserva.</td></tr>"; return; }
         snap.forEach(doc => {
             const d = doc.data(); const dataBr = d.data.split('-').reverse().join('/');
-            tb.innerHTML += `<tr>
-                <td>${d.nome_prof}</td><td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td>
-                <td style="text-align: center;"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td>
-            </tr>`;
+            tb.innerHTML += `<tr><td>${d.nome_prof}</td><td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td><td style="text-align:center"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td></tr>`;
         });
     }
 
-    async function deletar(id) { 
-        if(confirm("Deseja mesmo cancelar este agendamento?")) { 
-            await db.collection("agendamentos").doc(id).delete(); 
-            carregarMinhasReservas(); 
-            carregarReservasAdmin(); 
-            verificarHorarios(); 
-        } 
-    }
-
+    async function deletar(id) { if(confirm("Deseja mesmo cancelar este agendamento?")) { await db.collection("agendamentos").doc(id).delete(); carregarMinhasReservas(); carregarReservasAdmin(); verificarHorarios(); } }
     async function exportarCSV() {
         const snap = await db.collection("agendamentos").orderBy("data").get();
         let csv = "Prof;Data;Horario;Recurso\n";
@@ -603,27 +518,12 @@
         const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Reservas_STE.csv"; link.click();
     }
 
-    function atualizarRegraJustificativa() {
-        const r = document.getElementById('f-recurso').value;
-        const box = document.getElementById('box-just');
-        if (r.includes('STE')) {
-            box.className = 'info-box required';
-            document.getElementById('tit-just').innerText = 'Obrigatório: Conteúdo da Aula';
-        } else {
-            box.className = 'info-box optional';
-            document.getElementById('tit-just').innerText = 'Opcional: Observação';
-        }
-        verificarHorarios();
-    }
-
-    // AUTO LOGOUT
     let timer;
     function resetarTimerInatividade() {
         clearTimeout(timer);
         timer = setTimeout(() => { if(userLogado) { alert("Sessão encerrada por inatividade (5 Minutos)."); sair(); } }, 5 * 60 * 1000);
     }
     ['mousemove','mousedown','keypress','scroll','touchstart'].forEach(ev => document.addEventListener(ev, resetarTimerInatividade));
-
     async function sair() { await auth.signOut(); window.location.reload(); }
 </script>
 </body>
