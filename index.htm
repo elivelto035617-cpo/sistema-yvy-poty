@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Painel STE — Yvy Poty</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,214 +17,188 @@
 
     <style>
         /* ═══════════════════════════════════════════
-           SISTEMA DE TOKENS E TEMA (Dark/Light)
+           SISTEMA DE TOKENS E TEMA
            ═══════════════════════════════════════════ */
         :root {
             --accent: #3b82f6; --accent-deep: #1d4ed8; --accent-glow: rgba(59,130,246,0.25);
-            --success: #10b981; --success-deep: #047857;
-            --danger: #ef4444; --danger-deep: #b91c1c;
-            --warning: #f59e0b; --warning-deep: #b45309;
-            --primary: #1a73e8;
-
-            /* CLARO */
-            --bg-root: #f0f4ff; --bg-shell: #ffffff; --bg-sidebar: #fafbff;
-            --bg-card: #f5f7ff; --bg-input: #eef1fb;
-            --text-primary: #0f172a; --text-secondary: #475569; --text-muted: #94a3b8;
-            --border: rgba(148,163,184,0.25);
-            --shadow-a: rgba(15,23,42,0.10); --shadow-b: rgba(255,255,255,0.85);
-            --shadow-dark: rgba(0,0,0,0.15);
-            --nav-bg: rgba(255,255,255,0.9);
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --primary: #1a73e8;
+            --bg-root: #f0f4ff; --bg-shell: #ffffff; --bg-sidebar: #fafbff; --bg-card: #f5f7ff;
+            --bg-input: #eef1fb; --text-primary: #0f172a; --text-secondary: #475569;
+            --text-muted: #94a3b8; --border: rgba(148,163,184,0.25);
+            --shadow-dark: rgba(0,0,0,0.15); --nav-bg: rgba(255,255,255,0.95);
         }
 
         [data-theme="dark"] {
-            /* ESCURO */
-            --bg-root: #080c14; --bg-shell: #0e1422; --bg-sidebar: #0b1020;
-            --bg-card: #131a2e; --bg-input: #0f1525;
-            --text-primary: #e2e8f0; --text-secondary: #94a3b8; --text-muted: #475569;
-            --border: rgba(59,130,246,0.12);
-            --shadow-a: rgba(0,0,0,0.55); --shadow-b: rgba(59,130,246,0.04);
-            --shadow-dark: rgba(0,0,0,0.6);
-            --nav-bg: rgba(13,19,35,0.95);
+            --bg-root: #080c14; --bg-shell: #0e1422; --bg-sidebar: #0b1020; --bg-card: #131a2e;
+            --bg-input: #0f1525; --text-primary: #e2e8f0; --text-secondary: #94a3b8;
+            --text-muted: #475569; --border: rgba(59,130,246,0.12);
+            --shadow-dark: rgba(0,0,0,0.55); --nav-bg: rgba(13,19,35,0.95);
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'DM Sans', sans-serif; background: var(--bg-root);
-            height: 100vh; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; color: var(--text-primary); transition: background 0.5s ease;
+            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow-x: hidden; overflow-y: auto; color: var(--text-primary); transition: background 0.5s ease;
         }
 
         /* ═══════════════════════════════════════════
-           TELA DE LOGIN (Conforme código do usuário)
+           TELA DE LOGIN (NEON CORRIGIDO)
            ═══════════════════════════════════════════ */
         #section-login {
-            position: relative; width: 100%; max-width: 400px; border-radius: 20px;
-            background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 4px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8); z-index: 10;
+            position: relative; width: 90%; max-width: 380px; padding: 4px;
+            background: #111; border-radius: 24px; overflow: hidden; display: flex; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7); z-index: 1000;
         }
         #section-login::before {
-            content: ""; position: absolute; width: 150%; height: 150%;
-            background: conic-gradient(transparent, transparent, transparent, #1a73e8, #28a745);
-            animation: girarLuz 4s linear infinite;
+            content: ""; position: absolute; inset: -50%;
+            background: conic-gradient(from 0deg, var(--accent), var(--success), var(--accent));
+            animation: spin 4s linear infinite;
         }
-        @keyframes girarLuz { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .login-box { position: relative; width: 100%; background: #1c1c1e; border-radius: 16px; padding: 40px; z-index: 1; text-align: center; color: #fff; }
-        .logo-login { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #2a2c33; margin-bottom: 15px; object-fit: cover; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
-        .btn-neon { background: linear-gradient(90deg, #1a73e8, #28a745); border: none; color: white; font-weight: bold; width: 100%; padding: 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .btn-neon:active { transform: scale(0.98); }
-        .btn-neon:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .input-3d { width: 100%; height: 50px; padding: 0 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-input); color: var(--text-primary); box-shadow: inset 4px 4px 8px var(--shadow-dark); outline: none; transition: 0.3s;}
-        .input-3d:focus { border-color: var(--primary); }
+        .login-box { position: relative; z-index: 1; width: 100%; background: var(--bg-shell); border-radius: 20px; padding: 40px 30px; text-align: center; }
+        .logo-login { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--border); margin-bottom: 20px; object-fit: cover; }
+        .login-box h2 { font-family: 'Syne', sans-serif; margin-bottom: 20px; color: var(--text-primary); }
+        .input-modern { width: 100%; height: 48px; padding: 0 15px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text-primary); font-weight: 500; outline: none; margin-bottom: 12px;}
+        .input-modern:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+        .btn-neon { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent), var(--success)); color: white; font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
 
         /* ═══════════════════════════════════════════
-           SHELL DO APLICATIVO E SIDEBAR
+           ESTRUTURA DO APP (SHELL)
            ═══════════════════════════════════════════ */
         #app-screen {
-            display: none; position: relative; z-index: 1; width: 96%; max-width: 1360px; height: 92vh;
+            display: none; flex-direction: row; width: 96%; max-width: 1360px; height: 92vh;
             background: var(--bg-shell); border-radius: 28px; overflow: hidden;
-            box-shadow: 0 40px 80px var(--shadow-a), 0 0 0 1px var(--border), inset 0 1px 0 var(--shadow-b);
+            box-shadow: 0 40px 80px var(--shadow-dark); border: 1px solid var(--border);
         }
 
-        .sidebar {
-            width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border);
-            padding: 36px 22px; display: flex; flex-direction: column; align-items: center; position: relative; flex-shrink: 0;
-        }
-        .logo-escola { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-shell); margin-bottom: 20px;}
+        .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 30px 22px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+        .logo-escola { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-shell); margin-bottom: 20px; }
         
-        .user-card {
-            width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 18px 16px; margin-bottom: 16px; text-align: center; position: relative; overflow: hidden;
-        }
-        .user-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--success)); }
-        .user-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 3px; }
-        .role-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow); color: var(--accent); font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-top: 4px; }
-        .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 22px; font-weight: 800; color: var(--success); letter-spacing: 2px; }
+        .user-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 15px; text-align: center; margin-bottom: 15px; overflow: hidden;}
+        /* Ajuste do nome para não cortar no Mobile */
+        .user-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--text-primary); white-space: normal; word-wrap: break-word; line-height: 1.2;}
+        
+        .role-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow); color: var(--accent); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; margin-top: 6px; }
+        .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 22px; font-weight: 800; color: var(--success); }
 
-        .btn-tema {
-            display: flex; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 9px 18px; border-radius: 20px; font-weight: 500; font-size: 13px; cursor: pointer; margin-bottom: 24px; transition: all 0.2s ease;
-        }
-        .btn-tema:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .btn-tema { display: flex; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 9px 18px; border-radius: 20px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.3s; width: 100%; justify-content: center;}
 
-        .admin-buttons-container { position: absolute; bottom: 36px; left: 0; right: 0; display: flex; justify-content: center; gap: 18px; }
-        .btn-admin { width: 58px; height: 58px; border-radius: 16px; border: none; color: white; font-size: 22px; cursor: pointer; display: none; align-items: center; justify-content: center; transition: all 0.2s; position: relative; }
-        .btn-m { background: linear-gradient(135deg, var(--warning), #e67e22); box-shadow: 0 8px 24px rgba(245,158,11,0.35); }
-        .btn-u { background: linear-gradient(135deg, var(--success), #16a085); box-shadow: 0 8px 24px rgba(16,185,129,0.35); }
-
-        /* ═══════════════════════════════════════════
-           ÁREA DIREITA, ABAS E FORMULÁRIOS
-           ═══════════════════════════════════════════ */
-        .right-area { flex: 1; display: flex; flex-direction: column; position: relative; background: var(--bg-shell); min-width: 0; }
-        .content-scroll { flex: 1; padding: 40px 44px; overflow-y: auto; padding-bottom: 160px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+        /* ÁREA DE CONTEÚDO */
+        .right-area { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
+        .content-scroll { flex: 1; padding: 40px; overflow-y: auto; padding-bottom: 120px; }
 
         .aba { display: none; }
-        .aba.ativa { display: block; animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        .aba.ativa { display: block; animation: fadeUp 0.4s ease-out; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-header { display: flex; align-items: flex-end; gap: 16px; margin-bottom: 32px; }
-        .section-num { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; line-height: 1; color: var(--border); letter-spacing: -2px; }
-        .section-info h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: var(--text-primary); }
-
-        .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
-        .panel-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-
-        .top-controls { display: flex; gap: 16px; margin-bottom: 22px; }
+        .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        .top-controls { display: flex; gap: 15px; margin-bottom: 20px; }
         .control-group { flex: 1; }
-        .field-label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+        .field-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
         
-        .input-modern { width: 100%; height: 48px; padding: 0 16px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--text-primary); outline: none; transition: all 0.2s ease; appearance: none; -webkit-appearance: none; }
-        .input-modern:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
-
-        .box-textos { display: flex; gap: 16px; margin-bottom: 22px; }
-        .info-box { flex: 1; padding: 16px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid; position: relative; }
-        .info-box.required { border-color: rgba(239,68,68,0.4); }
-        .info-box.optional { border-color: rgba(59,130,246,0.3); }
-        .info-box-label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
-        .info-box.required .info-box-label { color: var(--danger); }
-        .info-box.optional .info-box-label { color: var(--accent); }
+        .box-textos { display: flex; gap: 15px; margin-bottom: 20px; }
+        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid transparent; }
+        .info-box.required { border-color: rgba(239,68,68,0.3); }
 
         .grade-horarios { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .slot { padding: 14px 10px; text-align: center; border-radius: 14px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: all 0.2s; position: relative; overflow: hidden; }
-        .slot-num { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; }
-        .slot-info { font-size: 11px; font-weight: 400; opacity: 0.85; }
-        .slot.livre { background: linear-gradient(135deg, #059669, #10b981); color: white; box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
-        .slot.livre:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(16,185,129,0.45); }
-        .slot.ocupado { background: var(--bg-input); color: var(--text-muted); border-color: rgba(239,68,68,0.3); cursor: not-allowed; }
-        .slot.ocupado .slot-num { color: var(--danger); }
+        .slot { padding: 15px; text-align: center; border-radius: 14px; font-weight: 600; cursor: pointer; border: none; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 4px 10px var(--shadow-dark); }
+        .slot.livre { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+        .slot.ocupado { background: var(--bg-input); color: var(--text-muted); border: 1px solid var(--border); cursor: not-allowed; }
 
         .table-wrapper { overflow-x: auto; }
         .tabela { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-        .tabela thead th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
-        .tabela tbody tr td { padding: 14px 16px; background: var(--bg-input); font-size: 14px; transition: background 0.2s; }
-        .tabela tbody tr td:first-child { border-radius: 12px 0 0 12px; font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); }
-        .tabela tbody tr td:last-child { border-radius: 0 12px 12px 0; text-align: center; }
-        
-        .chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
-        .chip-blue { background: rgba(59,130,246,0.12); color: var(--accent); }
-        .chip-green { background: rgba(16,185,129,0.12); color: var(--success); }
-        .chip-orange{ background: rgba(245,158,11,0.12); color: var(--warning); }
+        .tabela th { padding: 10px 15px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+        .tabela td { padding: 15px; background: var(--bg-input); font-size: 14px; }
+        .tabela td:first-child { border-radius: 12px 0 0 12px; font-weight: bold; color: var(--accent); }
+        .tabela td:last-child { border-radius: 0 12px 12px 0; text-align: center; }
 
-        .btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
-        .btn-danger { background: rgba(239,68,68,0.12); color: var(--danger); }
-        .btn-danger:hover { background: var(--danger); color: white; transform: translateY(-1px); }
+        .btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; background: rgba(239,68,68,0.12); color: var(--danger); transition: 0.2s; }
+        .btn-action:hover { background: var(--danger); color: white; }
 
         /* ═══════════════════════════════════════════
-           NAVBAR INFERIOR (Mobile Ready)
+           NAVBAR (Desktop e Mobile)
            ═══════════════════════════════════════════ */
-        .navbar-wrap { position: absolute; bottom: 0; left: 0; right: 0; height: 130px; display: flex; justify-content: center; align-items: center; padding-bottom: 28px; background: linear-gradient(to top, var(--bg-shell) 55%, transparent); pointer-events: none; }
-        .navigation { pointer-events: auto; position: relative; display: flex; align-items: center; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 22px; padding: 0 10px; height: 72px; box-shadow: 0 16px 48px var(--shadow-a); gap: 4px; }
-        .nav-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 90px; height: 56px; border-radius: 14px; cursor: pointer; border: none; background: transparent; transition: all 0.3s; gap: 3px; }
-        .nav-item.active { background: var(--accent); box-shadow: 0 6px 20px var(--accent-glow); }
-        .nav-icon { font-size: 22px; color: var(--text-muted); line-height: 1; }
-        .nav-item.active .nav-icon { color: #fff; }
-        .nav-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
-        .nav-item.active .nav-label { color: rgba(255,255,255,0.9); }
-        .nav-sep { width: 1px; height: 30px; background: var(--border); margin: 0 4px; }
+        .navbar-wrap {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 100px; display: flex; justify-content: center; align-items: center;
+            background: linear-gradient(transparent, var(--bg-shell) 70%);
+            pointer-events: none; z-index: 100;
+        }
+        .navigation {
+            pointer-events: auto; width: 600px; height: 72px;
+            background: var(--nav-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px; border: 1px solid var(--border);
+            box-shadow: 0 15px 35px var(--shadow-dark); display: flex; align-items: center; padding: 0 10px;
+        }
+        .nav-ul { display: flex; width: 100%; justify-content: space-evenly; list-style: none; position: relative; }
+        .nav-item { width: 80px; height: 72px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: none; border: none; }
+        .nav-item ion-icon { font-size: 24px; color: var(--text-muted); transition: 0.4s; }
+        .nav-item.active ion-icon { transform: translateY(-30px); color: #fff; }
+        .nav-item span { position: absolute; font-size: 10px; font-weight: 800; color: var(--accent); opacity: 0; transform: translateY(20px); transition: 0.4s; text-transform: uppercase; }
+        .nav-item.active span { opacity: 1; transform: translateY(15px); }
+        .indicator { position: absolute; top: -35px; width: 66px; height: 66px; background: var(--accent); border-radius: 50%; border: 5px solid var(--bg-shell); transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: -1; box-shadow: 0 5px 15px var(--accent-glow); }
 
-        /* TRANSITIONS GERAIS */
-        *, *::before, *::after { transition: background-color 0.4s ease, border-color 0.4s ease, color 0.3s ease, box-shadow 0.3s ease; }
-        .slot, .btn-admin, .nav-item, .logo-wrapper::before { transition: all 0.2s ease; }
-
-        /* RESPONSIVIDADE (Mobile) */
+        /* ═══════════════════════════════════════════
+           RESPONSIVIDADE MOBILE
+           ═══════════════════════════════════════════ */
         @media (max-width: 900px) {
-            #app-screen { flex-direction: column; border-radius: 0; width: 100%; height: 100vh; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; justify-content: space-between; padding: 15px 20px; border-right: none; border-bottom: 1px solid var(--border); }
-            .logo-escola { width: 50px; height: 50px; border-width: 2px; margin-bottom: 0;}
-            .user-card { width: auto; flex: 1; margin: 0 15px; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
-            .user-card h3 { font-size: 14px; margin-bottom: 0; }
-            .clock-display { font-size: 14px; margin-top:0;}
-            .btn-tema { margin-bottom: 0; padding: 8px 12px; font-size: 11px;}
-            .admin-buttons-container { position: relative; bottom: auto; width: auto; gap: 10px; }
-            .btn-admin { width: 45px; height: 45px; font-size: 18px; border-radius: 12px;}
-            .right-area { width: 100%; flex: 1; }
-            .content-scroll { padding: 20px 20px 100px 20px; }
-            .navbar-wrap { padding-bottom: 0; height: 80px; background: var(--nav-bg); border-top: 1px solid var(--border);}
-            .navigation { width: 100%; height: 100%; border-radius: 0; border: none; box-shadow: none; justify-content: space-around;}
-            .nav-item { width: 22%; height: 60px; }
-        }
-        @media (max-width: 600px) {
-            .sidebar { padding: 10px 15px; justify-content: center; gap: 10px;}
-            .user-card { margin: 0; flex-direction: column; align-items: center; gap: 5px; width: 100%; padding: 10px;}
-            .top-controls, .box-textos { flex-direction: column; gap: 12px; margin-bottom: 16px;}
-            .input-modern, .input-3d { font-size: 16px; }
+            body { align-items: flex-start; overflow-y: auto; }
+            #app-screen { 
+                flex-direction: column; width: 100%; height: auto; min-height: 100vh; 
+                border-radius: 0; border: none; margin: 0;
+            }
+            .sidebar { 
+                width: 100%; height: auto; flex-direction: row; padding: 15px; 
+                position: sticky; top: 0; z-index: 1000; border-right: none; 
+                border-bottom: 1px solid var(--border); justify-content: space-between; align-items: center;
+            }
+            .logo-escola { width: 50px; height: 50px; margin-bottom: 0; border-width: 2px; }
+            
+            /* Ajuste do nome para não cortar no Mobile */
+            .user-card { flex: 1; margin: 0 10px; padding: 5px 10px; display: flex; align-items: center; justify-content: space-between; text-align: left; background: transparent; border: none; box-shadow: none;}
+            .user-card h3 { font-size: 14px; margin: 0; line-height: 1.1;}
+            .clock-display { font-size: 14px; margin: 0; }
+            .role-badge { display: none; } 
+            
+            .btn-tema { width: auto; padding: 8px 12px; font-size: 0;}
+            .btn-tema ion-icon { font-size: 18px; margin: 0;}
+            .btn-tema span { display: none; } /* Esconde o texto "Modo Claro" no cel */
+
+            .right-area { width: 100%; height: auto; }
+            .content-scroll { padding: 20px 15px 120px 15px; overflow-y: visible; }
+            .top-controls, .box-textos { flex-direction: column; }
             .grade-horarios { grid-template-columns: repeat(2, 1fr); }
-            .table-wrapper { width: 100%; overflow-x: auto; }
-            .tabela { width: 600px; }
-            .section-header { flex-direction: column; align-items: flex-start; gap: 8px;}
-            @keyframes girarLuz { to { transform: rotate(0deg); } } 
+
+            /* Navbar Mobile (FIXA NO RODAPÉ) */
+            .navbar-wrap { 
+                position: fixed; bottom: 0; height: 85px; width: 100%; 
+                background: var(--nav-bg); border-top: 1px solid var(--border);
+                backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            }
+            .navigation { width: 100%; height: 100%; border-radius: 0; border: none; box-shadow: none; background: transparent; }
+            .nav-item.active ion-icon { transform: translateY(-25px); }
+            .indicator { border-color: var(--bg-root); }
         }
+        
+        @media (max-width: 400px) {
+            .user-card h3 { font-size: 12px; }
+            .clock-display { font-size: 12px; }
+        }
+        *, *::before, *::after { transition: background-color 0.3s, border-color 0.3s, color 0.3s; }
+        .slot, .nav-item ion-icon, .indicator { transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
     </style>
 </head>
 <body data-theme="dark">
 
 <div id="section-login">
     <div class="login-box">
-        <img src="logo.jpg" alt="Logo Escola" class="logo-login" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
-        <h2>Acesso STE</h2>
-        <input type="email" id="l-email" class="input-3d" placeholder="E-mail do professor" style="margin-bottom: 12px;">
-        <input type="password" id="l-pass" class="input-3d" placeholder="Senha" style="margin-bottom: 24px;">
+        <img src="logo.jpg" alt="Logo" class="logo-login" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
+        <h2 style="font-family: 'Syne'; margin-bottom: 20px;">Acesso STE</h2>
+        <input type="email" id="l-email" class="input-modern" placeholder="E-mail" style="margin-bottom: 12px;">
+        <input type="password" id="l-pass" class="input-modern" placeholder="Senha" style="margin-bottom: 20px;">
         <button class="btn-neon" id="btn-login-action" onclick="logar()">Entrar no Sistema</button>
     </div>
 </div>
@@ -232,23 +206,27 @@
 <div id="app-screen">
     
     <div class="sidebar">
-        <div class="logo-wrapper"><img src="logo.jpg" alt="Logo" class="logo-escola" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff&size=130&bold=true&rounded=true'"></div>
+        <img src="logo.jpg" alt="Logo" class="logo-escola" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
         <div class="user-card">
             <div>
                 <h3 id="user-display">Carregando...</h3>
                 <span class="role-badge" id="user-role"><ion-icon name="person-outline"></ion-icon> Professor</span>
             </div>
-            <div>
-                <div class="clock-display" id="local-clock">--:--</div>
-                <div style="font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Hora local</div>
-            </div>
+            <div class="clock-display" id="local-clock">00:00</div>
         </div>
-        <button class="btn-tema" id="theme-btn" onclick="toggleTheme()" aria-label="Alternar Tema">
-            <ion-icon name="sunny-outline" style="font-size:16px"></ion-icon> <span class="texto-btn-tema">Modo Claro</span>
-        </button>
-        <div class="admin-buttons-container">
-            <button class="btn-admin btn-m" id="btn-adm-painel" title="Painel Admin" onclick="irParaAba('aba-admin')"><ion-icon name="shield-checkmark-outline"></ion-icon></button>
-            <button class="btn-admin btn-u" id="btn-adm-excel" title="Baixar Excel" onclick="exportarCSV()"><ion-icon name="cloud-download-outline"></ion-icon></button>
+        
+        <div style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn-tema" id="theme-btn" onclick="toggleTheme()" title="Mudar Tema">
+                <ion-icon name="sunny-outline"></ion-icon> <span>Modo Claro</span>
+            </button>
+            <div id="admin-extras" style="display: none; width: 100%;">
+                <button class="btn-tema" onclick="irParaAba('aba-admin')" style="background: var(--warning); color: white; border-color: var(--warning);">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon> <span>Painel Admin</span>
+                </button>
+                <button class="btn-tema" onclick="exportarCSV()" style="background: var(--success); color: white; border-color: var(--success); margin-top: 10px;">
+                    <ion-icon name="cloud-download-outline"></ion-icon> <span>Baixar Excel</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -256,116 +234,103 @@
         <div class="content-scroll">
 
             <div id="aba-agendar" class="aba ativa">
-                <div class="section-header"><span class="section-num">01</span><div class="section-info"><h2>Agendar Equipamento</h2><p>Selecione data, recurso e horário</p></div></div>
+                <h2 style="font-family: 'Syne'; margin-bottom: 20px;">01. Agendar Recurso</h2>
                 <div class="panel">
-                    <div class="panel-title"><ion-icon name="calendar-outline"></ion-icon> Configuração</div>
                     <div class="top-controls">
                         <div class="control-group">
                             <label class="field-label">Data</label>
                             <input type="date" id="f-data" class="input-modern" onchange="verificarHorarios()">
                         </div>
                         <div class="control-group">
-                            <label class="field-label">Equipamento / Sala</label>
+                            <label class="field-label">Equipamento</label>
                             <select class="input-modern" id="f-recurso" onchange="atualizarRegraJustificativa()">
                                 <optgroup label="Salas">
                                     <option value="STE 1">Sala STE 1</option>
                                     <option value="STE 2">Sala STE 2</option>
                                 </optgroup>
-                                <optgroup label="Equipamentos / Outros">
+                                <optgroup label="Equipamentos">
                                     <option value="Projetor 1">Projetor 1</option>
                                     <option value="Projetor 2">Projetor 2</option>
                                     <option value="Projetor 3">Projetor 3</option>
                                     <option value="Projetor 4">Projetor 4</option>
-                                    <option value="Som 1">Caixa de Som 1</option>
-                                    <option value="Som 2">Caixa de Som 2</option>
+                                    <option value="Som 1">Som 1</option>
+                                    <option value="Som 2">Som 2</option>
                                     <option value="TV">TV</option>
                                 </optgroup>
                             </select>
                         </div>
-                        <div class="control-group" id="box-admin-nome" style="display: none;">
-                            <label class="field-label" style="color: var(--warning);">Agendar para Prof:</label>
-                            <input type="text" id="f-prof-admin" class="input-modern" placeholder="Nome do Professor" style="border-color: var(--warning);">
+                        <div class="control-group" id="box-admin-nome" style="display:none">
+                            <label class="field-label" style="color:var(--warning)">Reservar para Prof:</label>
+                            <input type="text" id="f-prof-admin" class="input-modern" placeholder="Nome do Professor">
                         </div>
                     </div>
                     <div class="box-textos">
-                        <div id="caixa-justificativa" class="info-box required">
-                            <div class="info-box-label"><span class="dot"></span><span id="titulo-justificativa">Obrigatório — Conteúdo</span></div>
-                            <input type="text" id="f-justificativa" class="input-modern" placeholder="Ex: Pesquisa biomas..." style="height:44px">
+                        <div id="box-just" class="info-box required">
+                            <label id="tit-just" class="field-label">Obrigatório: Conteúdo</label>
+                            <input type="text" id="f-justificativa" class="input-modern" placeholder="Assunto da aula...">
                         </div>
                         <div class="info-box optional">
-                            <div class="info-box-label"><span class="dot"></span>Opcional — Observação</div>
-                            <input type="text" id="f-obs" class="input-modern" placeholder="Ex: Preciso de cabo..." style="height:44px">
+                            <label class="field-label">Observação</label>
+                            <input type="text" id="f-obs" class="input-modern" placeholder="Opcional">
                         </div>
                     </div>
-                    <div class="grade-label"><ion-icon name="time-outline"></ion-icon> Horários Disponíveis</div>
-                    <div class="grade-horarios" id="grid-horarios">Selecione uma data permitida para ver os horários.</div>
+                    <div class="grade-label">Horários Disponíveis</div>
+                    <div class="grade-horarios" id="grid-horarios">Selecione uma data para ver...</div>
                 </div>
             </div>
 
             <div id="aba-geral" class="aba">
-                <div class="section-header"><span class="section-num">02</span><div class="section-info"><h2>Visão do Dia</h2><p>Ocupação geral</p></div></div>
+                <h2 style="font-family: 'Syne'; margin-bottom: 20px;">02. Visão do Dia</h2>
                 <div class="panel">
-                    <div class="panel-title"><ion-icon name="filter-outline"></ion-icon> Filtros</div>
                     <div class="top-controls">
-                        <div class="control-group"><label class="field-label">Data</label><input type="date" id="visao-data" class="input-modern" onchange="carregarVisaoDia()"></div>
-                        <div class="control-group"><label class="field-label">Recurso</label>
-                            <select id="visao-recurso" class="input-modern" onchange="carregarVisaoDia()">
-                                <optgroup label="Salas">
-                                    <option value="STE 1">Sala STE 1</option>
-                                    <option value="STE 2">Sala STE 2</option>
-                                </optgroup>
-                                <optgroup label="Equipamentos / Outros">
-                                    <option value="Projetor 1">Projetor 1</option>
-                                    <option value="Projetor 2">Projetor 2</option>
-                                    <option value="Projetor 3">Projetor 3</option>
-                                    <option value="Projetor 4">Projetor 4</option>
-                                    <option value="Som 1">Caixa de Som 1</option>
-                                    <option value="Som 2">Caixa de Som 2</option>
-                                    <option value="TV">TV</option>
-                                </optgroup>
+                        <div class="control-group"><input type="date" id="v-data" class="input-modern" onchange="carregarVisaoDia()"></div>
+                        <div class="control-group">
+                            <select id="v-recurso" class="input-modern" onchange="carregarVisaoDia()">
+                                <option value="STE 1">STE 1</option><option value="STE 2">STE 2</option>
+                                <option value="Projetor 1">Projetor 1</option><option value="Projetor 2">Projetor 2</option>
+                                <option value="Projetor 3">Projetor 3</option><option value="Projetor 4">Projetor 4</option>
+                                <option value="Som 1">Som 1</option><option value="Som 2">Som 2</option><option value="TV">TV</option>
                             </select>
                         </div>
                     </div>
-                    <div class="grade-label">Mapa de Ocupação</div>
-                    <div class="grade-horarios" id="grid-visao">Selecione a data para visualizar.</div>
+                    <div class="grade-horarios" id="grid-visao"></div>
                 </div>
             </div>
 
             <div id="aba-minhas" class="aba">
-                <div class="section-header"><span class="section-num">03</span><div class="section-info"><h2>Minhas Reservas</h2><p>Gerencie seus agendamentos</p></div></div>
+                <h2 style="font-family: 'Syne'; margin-bottom: 20px;">03. Minhas Reservas</h2>
                 <div class="panel">
-                    <div class="panel-title"><ion-icon name="bookmark-outline"></ion-icon> Reservas Ativas</div>
                     <div class="table-wrapper">
                         <table class="tabela">
                             <thead><tr><th>Data</th><th>Horário</th><th>Recurso</th><th style="text-align:center">Ação</th></tr></thead>
-                            <tbody id="tabela-minhas"><tr><td colspan="4">Carregando...</td></tr></tbody>
+                            <tbody id="tabela-minhas"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
             <div id="aba-admin" class="aba">
-                <div class="section-header" style="margin-bottom: 20px;"><div class="section-info"><h2 style="color: var(--warning);">Painel Administrativo</h2></div></div>
+                <h2 style="font-family: 'Syne'; color: var(--warning); margin-bottom: 20px;">Painel Geral Admin</h2>
                 <div class="panel">
-                    <div class="panel-title"><ion-icon name="list-outline"></ion-icon> Todos os Agendamentos</div>
                     <div class="table-wrapper">
                         <table class="tabela">
-                            <thead><tr><th>Professor</th><th>Data</th><th>Horário</th><th>Recurso</th><th>Conteúdo / Obs</th><th style="text-align:center">Ação</th></tr></thead>
-                            <tbody id="tabela-admin"><tr><td colspan="6">Acesso restrito.</td></tr></tbody>
+                            <thead><tr><th>Professor</th><th>Data</th><th>Horário</th><th>Recurso</th><th style="text-align:center">Ação</th></tr></thead>
+                            <tbody id="tabela-admin"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="navbar-wrap">
             <nav class="navigation">
-                <button class="nav-item active" onclick="ativarMenu(this, 'aba-agendar')"><ion-icon name="add-circle-outline" class="nav-icon"></ion-icon><span class="nav-label">Agendar</span></button>
-                <button class="nav-item" onclick="ativarMenu(this, 'aba-geral')"><ion-icon name="grid-outline" class="nav-icon"></ion-icon><span class="nav-label">Ver Dia</span></button>
-                <button class="nav-item" onclick="ativarMenu(this, 'aba-minhas')"><ion-icon name="bookmark-outline" class="nav-icon"></ion-icon><span class="nav-label">Minhas</span></button>
-                <div class="nav-sep"></div>
-                <button class="nav-item" onclick="sair()"><ion-icon name="log-out-outline" class="nav-icon"></ion-icon><span class="nav-label">Sair</span></button>
+                <ul class="nav-ul" id="nav-ul">
+                    <li class="nav-item active" onclick="ativarMenu(this, 'aba-agendar')"><a><ion-icon name="add-circle-outline"></ion-icon><span>Agendar</span></a></li>
+                    <li class="nav-item" onclick="ativarMenu(this, 'aba-geral')"><a><ion-icon name="grid-outline"></ion-icon><span>Ver Dia</span></a></li>
+                    <li class="nav-item" onclick="ativarMenu(this, 'aba-minhas')"><a><ion-icon name="bookmark-outline"></ion-icon><span>Minhas</span></a></li>
+                    <li class="nav-item" onclick="sair()"><a><ion-icon name="log-out-outline"></ion-icon><span>Sair</span></a></li>
+                    <div class="indicator" id="nav-indicator"></div>
+                </ul>
             </nav>
         </div>
     </div>
@@ -373,7 +338,7 @@
 
 <script>
     // ==========================================
-    // 1. CONFIGURAÇÕES FIREBASE (Obrigatório Preencher)
+    // CONFIGURAÇÕES FIREBASE (Preencha Aqui)
     // ==========================================
     const firebaseConfig = {
         apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
@@ -385,10 +350,8 @@
   measurementId: "G-DR0459S4S3"
     };
     
-    // E-MAILS DOS ADMINISTRADORES
     const EMAILS_ADMIN = ['eliveltonarandu@gmail.com', 'davivilhalva@gmail.com']; 
 
-    // DICIONÁRIO DE NOMES
     const NOMES_PERSONALIZADOS = {
         "angela.499954@edutec.sed.ms.gov.br": "Prof. Bia",
         "davivilhalva@gmail.com": "Coor. Danilo",
@@ -412,12 +375,12 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let usuarioLogado = null;
+    let userLogado = null;
     let dataHoje = new Date().toISOString().split('T')[0];
-    const HORARIOS_PADRAO = ["1º Horário", "2º Horário", "3º Horário", "4º Horário", "5º Horário", "6º Horário", "7º Horário", "8º Horário"];
+    const HORARIOS = ["1º Horário", "2º Horário", "3º Horário", "4º Horário", "5º Horário", "6º Horário", "7º Horário", "8º Horário"];
 
     // ==========================================
-    // 2. LÓGICA DE UI E TEMA
+    // MOTOR DA INTERFACE E NAVEGAÇÃO
     // ==========================================
     function atualizarRelogio() {
         const agora = new Date();
@@ -428,275 +391,233 @@
     setInterval(atualizarRelogio, 1000); atualizarRelogio();
 
     function toggleTheme() {
-        const body = document.body;
-        const btn = document.querySelector('.texto-btn-tema');
-        const icon = document.querySelector('#theme-btn ion-icon');
-        
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            icon.name = 'moon-outline'; btn.innerText = 'Modo Escuro';
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            icon.name = 'sunny-outline'; btn.innerText = 'Modo Claro';
-        }
+        const b = document.body;
+        const isDark = b.getAttribute('data-theme') === 'dark';
+        if (isDark) { b.removeAttribute('data-theme'); document.querySelector('#theme-btn span').innerText = "Modo Escuro"; }
+        else { b.setAttribute('data-theme', 'dark'); document.querySelector('#theme-btn span').innerText = "Modo Claro"; }
+        setTimeout(() => { const active = document.querySelector('.nav-item.active'); if(active) ativarMenu(active, null); }, 400);
     }
 
-    function ativarMenu(itemClicado, abaId) {
+    function ativarMenu(item, abaId) {
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        itemClicado.classList.add('active');
-        document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-        document.getElementById(abaId).classList.add('ativa');
+        item.classList.add('active');
+        const ind = document.getElementById('nav-indicator');
+        ind.style.opacity = '1';
+        
+        const ulRect = document.getElementById('nav-ul').getBoundingClientRect();
+        const liRect = item.getBoundingClientRect();
+        const centro = (liRect.left - ulRect.left) + (item.offsetWidth / 2) - 33;
+        ind.style.transform = `translateX(${centro}px)`;
 
-        if(abaId === 'aba-minhas') carregarMinhasReservas();
-        if(abaId === 'aba-geral') carregarVisaoDia();
+        if(abaId) {
+            document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+            document.getElementById(abaId).classList.add('ativa');
+            if(abaId === 'aba-minhas') carregarMinhasReservas();
+            if(abaId === 'aba-geral') carregarVisaoDia();
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        }
     }
 
     function irParaAba(abaId) {
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('nav-indicator').style.opacity = '0';
         document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
         document.getElementById(abaId).classList.add('ativa');
         if(abaId === 'aba-admin') carregarReservasAdmin();
     }
 
-    function atualizarRegraJustificativa() {
-        const recurso = document.getElementById('f-recurso').value;
-        const titulo = document.getElementById('titulo-justificativa');
-        const caixa = document.getElementById('caixa-justificativa');
-        
-        if (recurso.includes('STE')) {
-            caixa.classList.remove('optional'); caixa.classList.add('required');
-            titulo.innerText = 'Obrigatório — Conteúdo';
-        } else {
-            caixa.classList.remove('required'); caixa.classList.add('optional');
-            titulo.innerText = 'Opcional — Assunto';
-        }
-        verificarHorarios();
-    }
-
     // ==========================================
-    // 3. FIREBASE: LOGIN E SESSÃO
+    // FIREBASE: LOGICA E REGRAS
     // ==========================================
     async function logar() {
-        const email = document.getElementById('l-email').value;
-        const pass = document.getElementById('l-pass').value;
+        const e = document.getElementById('l-email').value;
+        const p = document.getElementById('l-pass').value;
         const btn = document.getElementById('btn-login-action');
-
-        if(!email || !pass) return alert("Preencha e-mail e senha!");
-        btn.innerText = "Conectando..."; btn.disabled = true;
-
-        try {
-            await auth.signInWithEmailAndPassword(email, pass);
-        } catch (error) {
-            alert("Erro ao logar. Verifique as credenciais.");
-            btn.innerText = "Entrar no Sistema"; btn.disabled = false;
-        }
+        if(!e || !p) return alert("Preencha e-mail e senha!");
+        btn.innerText = "Entrando..."; btn.disabled = true;
+        try { await auth.signInWithEmailAndPassword(e, p); } catch(err) { alert("Credenciais inválidas!"); btn.innerText = "Entrar no Sistema"; btn.disabled = false; }
     }
 
     auth.onAuthStateChanged(user => {
-        if (user) {
-            usuarioLogado = user;
-            iniciarAplicativo();
-        } else {
-            document.getElementById('section-login').style.display = 'flex';
-            document.getElementById('app-screen').style.display = 'none';
-        }
+        if(user) { userLogado = user; iniciarApp(); }
+        else { document.getElementById('section-login').style.display='flex'; document.getElementById('app-screen').style.display='none'; }
     });
 
-    function iniciarAplicativo() {
-        document.getElementById('section-login').style.display = 'none';
-        document.getElementById('app-screen').style.display = 'flex';
+    function iniciarApp() {
+        document.getElementById('section-login').style.display='none';
+        document.getElementById('app-screen').style.display='flex';
         
-        let nomeExibicao = NOMES_PERSONALIZADOS[usuarioLogado.email];
-        if (!nomeExibicao) {
-            nomeExibicao = "Prof. " + usuarioLogado.email.split('@')[0];
-        }
-        document.getElementById('user-display').innerText = nomeExibicao;
-
+        const nome = NOMES_PERSONALIZADOS[userLogado.email] || ("Prof. " + userLogado.email.split('@')[0]);
+        document.getElementById('user-display').innerText = nome;
         document.getElementById('f-data').setAttribute('min', dataHoje);
-        
-        if(EMAILS_ADMIN.includes(usuarioLogado.email)) {
-            document.querySelectorAll('.btn-admin').forEach(btn => btn.style.display = 'flex');
-            document.getElementById('user-role').innerHTML = '<ion-icon name="shield-checkmark-outline"></ion-icon> Administrador';
-            document.getElementById('box-admin-nome').style.display = 'block';
-        }
 
-        const btnPrimeiro = document.querySelector('.nav-item');
-        if(btnPrimeiro) ativarMenu(btnPrimeiro, 'aba-agendar');
+        if(EMAILS_ADMIN.includes(userLogado.email)) {
+            document.getElementById('admin-extras').style.display = 'block';
+            document.getElementById('box-admin-nome').style.display = 'block';
+            document.getElementById('user-role').innerHTML = '<ion-icon name="shield-checkmark-outline"></ion-icon> Admin';
+        }
         
-        // Ativa o monitoramento de inatividade assim que logar
+        ativarMenu(document.querySelector('.nav-item'), 'aba-agendar');
         resetarTimerInatividade();
     }
 
-    async function sair() {
-        await auth.signOut();
-        window.location.reload();
-    }
-
-    // ==========================================
-    // 4. FIREBASE: AGENDAMENTO E LEITURA
-    // ==========================================
     async function verificarHorarios() {
-        const dataEscolhida = document.getElementById('f-data').value;
-        const recurso = document.getElementById('f-recurso').value;
-        const divGrid = document.getElementById('grid-horarios');
+        const dt = document.getElementById('f-data').value;
+        const rc = document.getElementById('f-recurso').value;
+        const grid = document.getElementById('grid-horarios');
+        if(!dt) return;
 
-        if (!dataEscolhida) return;
-
-        // TRAVA DE AGENDAMENTO: BLOQUEIA MÊS FUTURO ANTES DO DIA 26
-        const dataAtualObj = new Date();
-        const diaAtual = dataAtualObj.getDate();
-        const mesAtual = dataAtualObj.getMonth() + 1;
-        const anoAtual = dataAtualObj.getFullYear();
+        // TRAVA DIA 26
+        const hoje = new Date();
+        const diaH = hoje.getDate();
+        const mesH = hoje.getMonth() + 1;
+        const anoH = hoje.getFullYear();
+        const p = dt.split('-');
+        const isFuturo = (p[0] > anoH) || (p[0] == anoH && p[1] > mesH);
         
-        const partesData = dataEscolhida.split('-');
-        const anoAgendamento = parseInt(partesData[0]);
-        const mesAgendamento = parseInt(partesData[1]);
-        
-        const isMesFuturo = (anoAgendamento > anoAtual) || (anoAgendamento === anoAtual && mesAgendamento > mesAtual);
-        
-        if (isMesFuturo && diaAtual < 26) {
-            alert("⚠️ Agendamentos para os próximos meses só são liberados a partir do dia 26 do mês atual.");
-            document.getElementById('f-data').value = ''; 
-            divGrid.innerHTML = "Selecione uma data permitida para ver os horários.";
+        if (isFuturo && diaH < 26) {
+            alert("Agenda do mês seguinte só libera no dia 26!");
+            document.getElementById('f-data').value = ""; 
+            grid.innerHTML = "Selecione uma data válida...";
             return;
         }
 
-        divGrid.innerHTML = "Buscando...";
-
-        const snapshot = await db.collection("agendamentos").where("data", "==", dataEscolhida).where("recurso", "==", recurso).get();
-        const ocupados = []; snapshot.forEach(doc => ocupados.push(doc.data().horario));
-
-        divGrid.innerHTML = "";
-        HORARIOS_PADRAO.forEach(hr => {
+        grid.innerHTML = "Buscando...";
+        const snap = await db.collection("agendamentos").where("data", "==", dt).where("recurso", "==", rc).get();
+        const ocupados = []; snap.forEach(doc => ocupados.push(doc.data().horario));
+        
+        grid.innerHTML = "";
+        HORARIOS.forEach(hr => {
             const btn = document.createElement('button');
-            if (ocupados.includes(hr)) {
-                btn.className = "slot ocupado";
-                btn.innerHTML = `<span class="slot-num">${hr.split('º')[0]}º</span><span class="slot-info">Ocupado</span>`;
-                btn.disabled = true;
-            } else {
-                btn.className = "slot livre";
-                btn.innerHTML = `<span class="slot-num">${hr.split('º')[0]}º</span><span class="slot-info">Reservar</span>`;
-                btn.onclick = () => salvarAgendamento(dataEscolhida, recurso, hr);
-            }
-            divGrid.appendChild(btn);
+            btn.className = ocupados.includes(hr) ? "slot ocupado" : "slot livre";
+            btn.innerHTML = `<span>${hr}</span><span>${ocupados.includes(hr) ? 'Ocupado' : 'Reservar'}</span>`;
+            if(!ocupados.includes(hr)) btn.onclick = () => salvar(dt, rc, hr);
+            grid.appendChild(btn);
         });
     }
 
-    async function salvarAgendamento(dataEscolhida, recurso, horario) {
-        const just = document.getElementById('f-justificativa').value;
-        const obs = document.getElementById('f-obs').value;
+    async function salvar(dt, rc, hr) {
+        const j = document.getElementById('f-justificativa').value;
+        const o = document.getElementById('f-obs').value;
+        if(rc.includes('STE') && !j) return alert("Conteúdo obrigatório para as Salas STE!");
         
-        if (recurso.includes('STE') && just.trim() === '') {
-            return alert("Preencha o conteúdo da aula!");
-        }
+        let nomeSalvar = NOMES_PERSONALIZADOS[userLogado.email] || ("Prof. " + userLogado.email.split('@')[0]);
+        const nomeDigitado = document.getElementById('f-prof-admin').value;
+        if(EMAILS_ADMIN.includes(userLogado.email) && nomeDigitado) nomeSalvar = nomeDigitado;
 
-        let nomeParaSalvar = NOMES_PERSONALIZADOS[usuarioLogado.email] || ("Prof. " + usuarioLogado.email.split('@')[0]);
-        
-        if(EMAILS_ADMIN.includes(usuarioLogado.email)) {
-            const nomeDigitado = document.getElementById('f-prof-admin').value;
-            if(nomeDigitado.trim() !== '') {
-                nomeParaSalvar = nomeDigitado;
-            }
-        }
-
-        if(confirm(`Confirmar reserva de ${recurso} para o ${horario}?`)) {
-            await db.collection("agendamentos").add({
-                email_prof: usuarioLogado.email, 
-                nome_prof: nomeParaSalvar, 
-                data: dataEscolhida, horario: horario, recurso: recurso,
-                justificativa: just, observacao: obs,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        if(confirm(`Confirmar ${rc} para ${hr}?`)) {
+            await db.collection("agendamentos").add({ 
+                email_prof: userLogado.email, 
+                nome_prof: nomeSalvar, 
+                data: dt, 
+                recurso: rc, 
+                horario: hr, 
+                justificativa: j, 
+                observacao: o, 
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             });
-            alert("Reserva confirmada!");
-            document.getElementById('f-justificativa').value = ""; document.getElementById('f-obs').value = "";
-            if(document.getElementById('f-prof-admin')) document.getElementById('f-prof-admin').value = "";
+            alert("Agendado com sucesso!"); 
+            document.getElementById('f-justificativa').value = "";
             verificarHorarios();
         }
     }
 
     async function carregarMinhasReservas() {
-        const tb = document.getElementById('tabela-minhas'); tb.innerHTML = "<tr><td colspan='4'>Buscando...</td></tr>";
-        const snapshot = await db.collection("agendamentos").where("email_prof", "==", usuarioLogado.email).where("data", ">=", dataHoje).orderBy("data").get();
+        const tb = document.getElementById('tabela-minhas'); 
+        tb.innerHTML = "<tr><td colspan='4'>Carregando suas reservas...</td></tr>";
+        
+        // Busca TODAS as reservas deste professor (Solução para evitar o erro de index no Firebase)
+        const snap = await db.collection("agendamentos").where("email_prof", "==", userLogado.email).get();
+        
+        // Filtra pelo JavaScript as reservas com datas maiores ou iguais a hoje e ordena
+        let reservas = [];
+        snap.forEach(doc => {
+            if (doc.data().data >= dataHoje) {
+                reservas.push({ id: doc.id, ...doc.data() });
+            }
+        });
+        
+        reservas.sort((a, b) => a.data.localeCompare(b.data)); // Organiza por data
         
         tb.innerHTML = "";
-        if(snapshot.empty) return tb.innerHTML = "<tr><td colspan='4'>Nenhuma reserva futura.</td></tr>";
+        if(reservas.length === 0) {
+            tb.innerHTML = "<tr><td colspan='4'>Você não tem agendamentos futuros.</td></tr>";
+            return;
+        }
 
-        snapshot.forEach(doc => {
-            const d = doc.data(); const dataBr = d.data.split('-').reverse().join('/');
+        reservas.forEach(d => {
+            const dataBr = d.data.split('-').reverse().join('/');
             tb.innerHTML += `<tr>
-                <td>${dataBr}</td><td>${d.horario}</td><td><span class="chip chip-blue">${d.recurso}</span></td>
-                <td><button class="btn-action btn-danger" onclick="deletarReserva('${doc.id}')"><ion-icon name="trash-outline"></ion-icon> Remover</button></td>
+                <td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td>
+                <td style="text-align: center;"><button class="btn-action" onclick="deletar('${d.id}')"><ion-icon name="trash-outline"></ion-icon></button></td>
             </tr>`;
         });
     }
 
     async function carregarVisaoDia() {
-        const data = document.getElementById('visao-data').value;
-        const recurso = document.getElementById('visao-recurso').value;
-        const divGrid = document.getElementById('grid-visao');
-        if (!data) return; divGrid.innerHTML = "Carregando...";
-
-        const snapshot = await db.collection("agendamentos").where("data", "==", data).where("recurso", "==", recurso).get();
-        const mapa = {}; snapshot.forEach(doc => { mapa[doc.data().horario] = doc.data().nome_prof; });
-
-        divGrid.innerHTML = "";
-        HORARIOS_PADRAO.forEach(hr => {
-            const div = document.createElement('div');
-            if (mapa[hr]) { div.className = "slot ocupado"; div.innerHTML = `<span class="slot-num">${hr.split('º')[0]}º</span><span class="slot-info">${mapa[hr]}</span>`; }
-            else { div.className = "slot livre"; div.innerHTML = `<span class="slot-num">${hr.split('º')[0]}º</span><span class="slot-info">Livre</span>`; div.style.cursor="default"; }
-            divGrid.appendChild(div);
-        });
+        const dt = document.getElementById('v-data').value;
+        const rc = document.getElementById('v-recurso').value;
+        if(!dt) return;
+        const snap = await db.collection("agendamentos").where("data", "==", dt).where("recurso", "==", rc).get();
+        const mapa = {}; snap.forEach(doc => mapa[doc.data().horario] = doc.data().nome_prof);
+        const grid = document.getElementById('grid-visao'); grid.innerHTML = "";
+        HORARIOS.forEach(hr => { grid.innerHTML += `<div class="slot ${mapa[hr] ? 'ocupado' : 'livre'}"><span>${hr}</span><span>${mapa[hr] || 'Livre'}</span></div>`; });
     }
 
     async function carregarReservasAdmin() {
-        const tb = document.getElementById('tabela-admin'); tb.innerHTML = "<tr><td colspan='6'>Carregando...</td></tr>";
-        const snapshot = await db.collection("agendamentos").orderBy("data").get(); tb.innerHTML = "";
-        snapshot.forEach(doc => {
+        const tb = document.getElementById('tabela-admin'); tb.innerHTML = "<tr><td colspan='5'>Carregando tudo...</td></tr>";
+        const snap = await db.collection("agendamentos").orderBy("data").get(); 
+        tb.innerHTML = "";
+        if(snap.empty) tb.innerHTML = "<tr><td colspan='5'>Nenhuma reserva.</td></tr>";
+        
+        snap.forEach(doc => {
             const d = doc.data(); const dataBr = d.data.split('-').reverse().join('/');
             tb.innerHTML += `<tr>
-                <td>${d.nome_prof}</td><td>${dataBr}</td><td>${d.horario}</td><td><span class="chip chip-orange">${d.recurso}</span></td>
-                <td style="font-size: 11px">${d.justificativa || '-'} <br> <i>${d.observacao || ''}</i></td>
-                <td><button class="btn-action btn-danger" onclick="deletarReserva('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td>
+                <td>${d.nome_prof}</td><td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td>
+                <td style="text-align: center;"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td>
             </tr>`;
         });
     }
 
-    async function deletarReserva(id) {
-        if(confirm("Deseja cancelar esta reserva?")) {
-            await db.collection("agendamentos").doc(id).delete();
-            carregarMinhasReservas(); carregarReservasAdmin();
-        }
+    async function deletar(id) { 
+        if(confirm("Deseja mesmo cancelar este agendamento?")) { 
+            await db.collection("agendamentos").doc(id).delete(); 
+            carregarMinhasReservas(); 
+            carregarReservasAdmin(); 
+            verificarHorarios(); // Atualiza a tela 1 se estiver nela
+        } 
     }
 
     async function exportarCSV() {
-        const snapshot = await db.collection("agendamentos").orderBy("data").get();
-        let csv = "Professor;Data;Horario;Recurso;Conteudo;Observacao\n";
-        snapshot.forEach(doc => { const d = doc.data(); csv += `${d.nome_prof};${d.data};${d.horario};${d.recurso};${d.justificativa || '-'};${d.observacao || '-'}\n`; });
-        const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Relatorio_Agendamentos.csv"; link.click();
+        const snap = await db.collection("agendamentos").orderBy("data").get();
+        let csv = "Prof;Data;Horario;Recurso\n";
+        snap.forEach(doc => { const d = doc.data(); csv += `${d.nome_prof};${d.data};${d.horario};${d.recurso}\n`; });
+        const blob = new Blob(["\ufeff"+csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Reservas_STE.csv"; link.click();
     }
 
-    // ==========================================
-    // 5. INATIVIDADE (AUTO-LOGOUT EM 5 MINUTOS)
-    // ==========================================
-    let timerInatividade;
-    const TEMPO_LIMITE_INATIVIDADE = 5 * 60 * 1000; // 5 minutos
-
-    function resetarTimerInatividade() {
-        clearTimeout(timerInatividade);
-        if (usuarioLogado) {
-            timerInatividade = setTimeout(() => {
-                alert("Sessão expirada por inatividade de 5 minutos.");
-                sair();
-            }, TEMPO_LIMITE_INATIVIDADE);
+    function atualizarRegraJustificativa() {
+        const r = document.getElementById('f-recurso').value;
+        const box = document.getElementById('box-just');
+        if (r.includes('STE')) {
+            box.className = 'info-box required';
+            document.getElementById('tit-just').innerText = 'Obrigatório: Conteúdo da Aula';
+        } else {
+            box.className = 'info-box optional';
+            document.getElementById('tit-just').innerText = 'Opcional: Observação';
         }
+        verificarHorarios();
     }
 
-    // Monitora as ações do usuário na tela
-    ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'].forEach(evento => {
-        document.addEventListener(evento, resetarTimerInatividade, true);
-    });
+    // AUTO LOGOUT
+    let timer;
+    function resetarTimerInatividade() {
+        clearTimeout(timer);
+        timer = setTimeout(() => { if(userLogado) { alert("Sessão encerrada por inatividade (5 Minutos)."); sair(); } }, 5 * 60 * 1000);
+    }
+    ['mousemove','mousedown','keypress','scroll','touchstart'].forEach(ev => document.addEventListener(ev, resetarTimerInatividade));
 
+    async function sair() { await auth.signOut(); window.location.reload(); }
 </script>
 </body>
 </html>
