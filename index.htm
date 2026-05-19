@@ -37,11 +37,7 @@
         body { font-family: 'DM Sans', sans-serif; background: var(--bg-root); color: var(--text-primary); min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
 
         /* TELA LOGIN NEON */
-        #section-login {
-            position: relative; width: 90%; max-width: 380px; padding: 4px;
-            background: #111; border-radius: 24px; overflow: hidden; display: flex; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7); z-index: 1000;
-        }
+        #section-login { position: relative; width: 90%; max-width: 380px; padding: 4px; background: #111; border-radius: 24px; overflow: hidden; display: flex; box-shadow: 0 20px 50px rgba(0,0,0,0.7); z-index: 1000; }
         #section-login::before { content: ""; position: absolute; inset: -50%; background: conic-gradient(from 0deg, var(--accent), var(--success), var(--accent)); animation: spin 4s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .login-box { position: relative; z-index: 1; width: 100%; background: var(--bg-shell); border-radius: 20px; padding: 40px 30px; text-align: center; }
@@ -51,10 +47,9 @@
         .input-modern:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
         .btn-neon { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent), var(--success)); color: white; font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
 
-        /* SHELL */
+        /* SHELL E SIDEBAR */
         #app-screen { display: none; flex-direction: row; width: 96%; max-width: 1360px; height: 92vh; background: var(--bg-shell); border-radius: 28px; overflow: hidden; box-shadow: 0 40px 80px var(--shadow-dark); border: 1px solid var(--border); }
 
-        /* SIDEBAR E BOTÕES */
         .sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 30px 22px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; position: relative;}
         .mobile-top-bar { display: contents; }
         .logo-escola { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-shell); margin-bottom: 20px; }
@@ -65,12 +60,15 @@
         .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 20px; font-weight: 800; color: var(--success); }
         
         .sidebar-buttons { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-        .btn-tema { display: flex; justify-content: center; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s; width: 100%; }
-        
         #admin-extras { display: none; flex-direction: column; gap: 10px; width: 100%; }
-        .btn-admin { width: 55px; height: 55px; border-radius: 14px; border: none; color: white; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); flex: 1;}
-        .btn-m { background: linear-gradient(135deg, var(--warning), #e67e22); }
-        .btn-u { background: linear-gradient(135deg, var(--success), #16a085); }
+
+        .btn-sidebar { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 12px; border-radius: 12px; font-weight: 600; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: 0.3s; border: none; }
+        .btn-sidebar ion-icon { font-size: 18px; }
+        .btn-sidebar:hover { filter: brightness(0.9); transform: translateY(-1px); }
+        
+        .btn-tema { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); }
+        .btn-admin-panel { background: linear-gradient(135deg, var(--warning), #e67e22); color: white; box-shadow: 0 4px 15px rgba(245,158,11,0.2); }
+        .btn-admin-excel { background: linear-gradient(135deg, var(--success), #16a085); color: white; box-shadow: 0 4px 15px rgba(16,185,129,0.2); }
 
         /* ÁREA DIREITA E FORMULÁRIOS */
         .right-area { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; background: var(--bg-shell); }
@@ -86,7 +84,7 @@
         .field-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px;}
         
         .box-textos { display: flex; gap: 15px; margin-bottom: 20px; }
-        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1px solid transparent; }
+        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid transparent; }
         .info-box.required { border-color: rgba(239,68,68,0.3); }
         .info-box.optional { border-color: rgba(59,130,246,0.3); }
 
@@ -115,7 +113,7 @@
         .nav-item span { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
         .nav-item.active span { color: rgba(255,255,255,0.9); }
 
-        /* RESPONSIVIDADE (MOBILE) */
+        /* RESPONSIVIDADE MOBILE */
         @media (max-width: 900px) {
             #app-screen { flex-direction: column; width: 100%; height: auto; min-height: 100vh; border-radius: 0; border: none; }
             .sidebar { width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; border-right: none; border-bottom: 1px solid var(--border); box-shadow: 0 4px 20px var(--shadow-dark); }
@@ -128,11 +126,15 @@
             .clock-display { font-size: 13px; margin: 0; }
             .role-badge { display: none; }
 
-            .sidebar-buttons { flex-direction: row; flex-wrap: wrap; }
-            .sidebar-buttons > button { flex: 1; padding: 12px 0; }
-            #admin-extras { flex-direction: row; }
-            #admin-extras button { flex: 1; padding: 12px 0;}
-            .btn-tema span { display: none; } 
+            .sidebar-buttons { flex-direction: row; flex-wrap: nowrap; gap: 10px;}
+            .btn-sidebar { padding: 10px; font-size: 11px; flex: 1;}
+            #admin-extras { flex-direction: row; flex-wrap: nowrap; }
+            
+            /* No mobile o texto dos botões admin quebram, então mantemos só o texto curto ou ícones */
+            .btn-admin-panel span::after { content: "Admin"; font-size: 11px;}
+            .btn-admin-panel span { font-size: 0; }
+            .btn-admin-excel span::after { content: "Excel"; font-size: 11px;}
+            .btn-admin-excel span { font-size: 0; }
             
             .right-area { width: 100%; height: auto; }
             .content-scroll { padding: 20px 15px 120px 15px; overflow-y: visible; }
@@ -171,15 +173,15 @@
         </div>
         
         <div class="sidebar-buttons">
-            <button class="btn-tema" id="theme-btn" onclick="toggleTheme()" title="Modo Claro/Escuro">
-                <ion-icon name="sunny-outline" style="font-size:18px"></ion-icon> <span>Modo Claro</span>
+            <button class="btn-sidebar btn-tema" id="theme-btn" onclick="toggleTheme()" title="Modo Claro/Escuro">
+                <ion-icon name="sunny-outline"></ion-icon> <span>Modo Claro</span>
             </button>
             <div id="admin-extras">
-                <button class="btn-admin btn-m" onclick="irParaAba('aba-admin')" title="Painel Admin">
-                    <ion-icon name="shield-checkmark-outline" style="font-size:18px"></ion-icon> <span>Painel Admin</span>
+                <button class="btn-sidebar btn-admin-panel" onclick="irParaAba('aba-admin')" title="Painel Admin">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon> <span>Painel Admin</span>
                 </button>
-                <button class="btn-admin btn-u" onclick="exportarCSV()" title="Baixar Planilha">
-                    <ion-icon name="cloud-download-outline" style="font-size:18px"></ion-icon> <span>Baixar Excel</span>
+                <button class="btn-sidebar btn-admin-excel" onclick="exportarCSV()" title="Baixar Planilha">
+                    <ion-icon name="cloud-download-outline"></ion-icon> <span>Baixar Excel</span>
                 </button>
             </div>
         </div>
@@ -217,7 +219,7 @@
                         <div class="control-group" id="box-admin-nome" style="display:none">
                             <label class="field-label" style="color:var(--warning)">Reservar para Prof:</label>
                             <select class="input-modern" id="f-prof-admin" style="border-color:var(--warning)">
-                                </select>
+                            </select>
                         </div>
                     </div>
                     <div class="box-textos">
@@ -272,19 +274,14 @@
                     <div class="table-wrapper">
                         <table class="tabela">
                             <thead>
-                                <tr>
-                                    <th>Professor</th>
-                                    <th>Data</th>
-                                    <th>Horário</th>
-                                    <th>Recurso</th>
-                                    <th>Conteúdo / Obs</th> <th style="text-align:center">Ação</th>
-                                </tr>
+                                <tr><th>Professor</th><th>Data</th><th>Horário</th><th>Recurso</th><th>Conteúdo / Obs</th><th style="text-align:center">Ação</th></tr>
                             </thead>
                             <tbody id="tabela-admin"><tr><td colspan="6" style="text-align:center">Acesso restrito.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="navbar-wrap">
@@ -310,7 +307,7 @@
 
 <script>
     // ==========================================
-    // 1. CONFIGURAÇÕES FIREBASE (Preencha Aqui)
+    // 1. CONFIGURAÇÕES FIREBASE
     // ==========================================
     const firebaseConfig = {
         apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
@@ -348,7 +345,14 @@
     const db = firebase.firestore();
 
     let userLogado = null;
-    let dataHoje = new Date().toISOString().split('T')[0];
+    
+    // Calcula a data de hoje no fuso horário local corretamente para filtro
+    const hojeObj = new Date();
+    const anoH = hojeObj.getFullYear();
+    const mesH = String(hojeObj.getMonth() + 1).padStart(2, '0');
+    const diaH = String(hojeObj.getDate()).padStart(2, '0');
+    let dataHoje = `${anoH}-${mesH}-${diaH}`;
+    
     const HORARIOS = ["1º Aula", "2º Aula", "3º Aula", "4º Aula", "5º Aula", "6º Aula", "7º Aula", "8º Aula"];
 
     // ==========================================
@@ -363,15 +367,15 @@
     setInterval(atualizarRelogio, 1000); atualizarRelogio();
 
     function toggleTheme() {
-        const body = document.body;
+        const b = document.body;
         const btnText = document.querySelector('#theme-btn span');
         const icon = document.querySelector('#theme-btn ion-icon');
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
+        if (b.getAttribute('data-theme') === 'dark') {
+            b.removeAttribute('data-theme');
             icon.name = 'moon-outline'; 
             if(btnText) btnText.innerText = 'Modo Escuro';
         } else {
-            body.setAttribute('data-theme', 'dark');
+            b.setAttribute('data-theme', 'dark');
             icon.name = 'sunny-outline'; 
             if(btnText) btnText.innerText = 'Modo Claro';
         }
@@ -455,9 +459,10 @@
         const grid = document.getElementById('grid-horarios');
         if(!dt) return;
 
-        const hoje = new Date();
-        const isFuturo = (dt.split('-')[0] > hoje.getFullYear()) || (dt.split('-')[0] == hoje.getFullYear() && dt.split('-')[1] > hoje.getMonth() + 1);
-        if (isFuturo && hoje.getDate() < 26) {
+        const p = dt.split('-');
+        const isFuturo = (p[0] > anoH) || (p[0] == anoH && p[1] > mesH);
+        
+        if (isFuturo && hojeObj.getDate() < 26) {
             alert("A agenda do mês seguinte só é liberada a partir do dia 26!");
             document.getElementById('f-data').value = ""; grid.innerHTML = "Selecione uma data permitida para ver os horários."; return;
         }
@@ -508,8 +513,14 @@
     async function carregarMinhasReservas() {
         const tb = document.getElementById('tabela-minhas'); tb.innerHTML = "<tr><td colspan='4' style='text-align:center'>Buscando...</td></tr>";
         const snap = await db.collection("agendamentos").where("email_prof", "==", userLogado.email).get();
+        
         let reservas = [];
-        snap.forEach(doc => { if (doc.data().data >= dataHoje) reservas.push({ id: doc.id, ...doc.data() }); });
+        snap.forEach(doc => { 
+            // O FILTRO DAS DATAS PASSADAS AQUI
+            if (doc.data().data >= dataHoje) {
+                reservas.push({ id: doc.id, ...doc.data() }); 
+            }
+        });
         reservas.sort((a, b) => a.data.localeCompare(b.data)); 
         
         tb.innerHTML = "";
@@ -534,21 +545,28 @@
     async function carregarReservasAdmin() {
         const tb = document.getElementById('tabela-admin'); tb.innerHTML = "<tr><td colspan='6' style='text-align:center'>Carregando tudo...</td></tr>";
         const snap = await db.collection("agendamentos").orderBy("data").get(); 
-        tb.innerHTML = "";
-        if(snap.empty) { tb.innerHTML = "<tr><td colspan='6' style='text-align:center'>Nenhuma reserva.</td></tr>"; return; }
         
+        tb.innerHTML = "";
+        let temReserva = false;
+
         snap.forEach(doc => {
-            const d = doc.data(); const dataBr = d.data.split('-').reverse().join('/');
-            // AQUI ESTÁ A LÓGICA DE EXIBIR O CONTEÚDO E A OBSERVAÇÃO PARA O ADMIN
-            tb.innerHTML += `<tr>
-                <td>${d.nome_prof}</td>
-                <td>${dataBr}</td>
-                <td>${d.horario}</td>
-                <td><span class="chip chip-orange">${d.recurso}</span></td>
-                <td style="font-size: 11px; max-width: 150px; word-wrap: break-word;">${d.justificativa || '-'} <br> <i style="color:var(--text-muted)">${d.observacao || ''}</i></td>
-                <td style="text-align:center"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td>
-            </tr>`;
+            const d = doc.data(); 
+            // O FILTRO DAS DATAS PASSADAS NO ADMIN AQUI
+            if (d.data >= dataHoje) {
+                temReserva = true;
+                const dataBr = d.data.split('-').reverse().join('/');
+                tb.innerHTML += `<tr>
+                    <td>${d.nome_prof}</td>
+                    <td>${dataBr}</td>
+                    <td>${d.horario}</td>
+                    <td><span class="chip chip-orange">${d.recurso}</span></td>
+                    <td style="font-size: 11px; max-width: 150px; word-wrap: break-word;">${d.justificativa || '-'} <br> <i style="color:var(--text-muted)">${d.observacao || ''}</i></td>
+                    <td style="text-align:center"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td>
+                </tr>`;
+            }
         });
+        
+        if(!temReserva) { tb.innerHTML = "<tr><td colspan='6' style='text-align:center'>Nenhuma reserva futura.</td></tr>"; }
     }
 
     async function deletar(id) { if(confirm("Deseja mesmo cancelar este agendamento?")) { await db.collection("agendamentos").doc(id).delete(); carregarMinhasReservas(); carregarReservasAdmin(); verificarHorarios(); } }
