@@ -65,11 +65,12 @@
         .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 20px; font-weight: 800; color: var(--success); }
         
         .sidebar-buttons { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-        
         .btn-tema { display: flex; justify-content: center; align-items: center; gap: 8px; background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s; width: 100%; }
-        .btn-tema:hover { filter: brightness(0.9); }
         
         #admin-extras { display: none; flex-direction: column; gap: 10px; width: 100%; }
+        .btn-admin { width: 55px; height: 55px; border-radius: 14px; border: none; color: white; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); flex: 1;}
+        .btn-m { background: linear-gradient(135deg, var(--warning), #e67e22); }
+        .btn-u { background: linear-gradient(135deg, var(--success), #16a085); }
 
         /* ÁREA DIREITA E FORMULÁRIOS */
         .right-area { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; background: var(--bg-shell); }
@@ -85,7 +86,7 @@
         .field-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px;}
         
         .box-textos { display: flex; gap: 15px; margin-bottom: 20px; }
-        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid transparent; }
+        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1px solid transparent; }
         .info-box.required { border-color: rgba(239,68,68,0.3); }
         .info-box.optional { border-color: rgba(59,130,246,0.3); }
 
@@ -132,7 +133,6 @@
             #admin-extras { flex-direction: row; }
             #admin-extras button { flex: 1; padding: 12px 0;}
             .btn-tema span { display: none; } 
-            .btn-tema ion-icon { font-size: 20px; margin: 0; }
             
             .right-area { width: 100%; height: auto; }
             .content-scroll { padding: 20px 15px 120px 15px; overflow-y: visible; }
@@ -150,10 +150,10 @@
 
 <div id="section-login">
     <div class="login-box">
-        <img src="logo.jpg" alt="Logo" class="logo-login" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
+        <img src="logo.jpg" alt="Logo Escola" class="logo-login" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
         <h2 style="font-family: 'Syne'; margin-bottom: 20px;">Acesso STE</h2>
-        <input type="email" id="l-email" class="input-modern" placeholder="E-mail" style="margin-bottom: 12px;">
-        <input type="password" id="l-pass" class="input-modern" placeholder="Senha" style="margin-bottom: 20px;">
+        <input type="email" id="l-email" class="input-modern" placeholder="E-mail do professor" style="margin-bottom: 12px;">
+        <input type="password" id="l-pass" class="input-modern" placeholder="Senha" style="margin-bottom: 24px;">
         <button class="btn-neon" id="btn-login-action" onclick="logar()">Entrar no Sistema</button>
     </div>
 </div>
@@ -175,10 +175,10 @@
                 <ion-icon name="sunny-outline" style="font-size:18px"></ion-icon> <span>Modo Claro</span>
             </button>
             <div id="admin-extras">
-                <button class="btn-tema" onclick="irParaAba('aba-admin')" style="background: var(--warning); color: #fff; border: none;" title="Painel Admin">
+                <button class="btn-admin btn-m" onclick="irParaAba('aba-admin')" title="Painel Admin">
                     <ion-icon name="shield-checkmark-outline" style="font-size:18px"></ion-icon> <span>Painel Admin</span>
                 </button>
-                <button class="btn-tema" onclick="exportarCSV()" style="background: var(--success); color: #fff; border: none;" title="Baixar Planilha">
+                <button class="btn-admin btn-u" onclick="exportarCSV()" title="Baixar Planilha">
                     <ion-icon name="cloud-download-outline" style="font-size:18px"></ion-icon> <span>Baixar Excel</span>
                 </button>
             </div>
@@ -216,7 +216,8 @@
                         </div>
                         <div class="control-group" id="box-admin-nome" style="display:none">
                             <label class="field-label" style="color:var(--warning)">Reservar para Prof:</label>
-                            <input type="text" id="f-prof-admin" class="input-modern" placeholder="Nome do Professor" style="border-color:var(--warning)">
+                            <select class="input-modern" id="f-prof-admin" style="border-color:var(--warning)">
+                                </select>
                         </div>
                     </div>
                     <div class="box-textos">
@@ -248,7 +249,8 @@
                             </select>
                         </div>
                     </div>
-                    <div class="grade-horarios" id="grid-visao"></div>
+                    <div class="grade-label">Mapa de Ocupação</div>
+                    <div class="grade-horarios" id="grid-visao">Selecione a data para visualizar.</div>
                 </div>
             </div>
 
@@ -269,8 +271,16 @@
                 <div class="panel">
                     <div class="table-wrapper">
                         <table class="tabela">
-                            <thead><tr><th>Professor</th><th>Data</th><th>Horário</th><th>Recurso</th><th style="text-align:center">Ação</th></tr></thead>
-                            <tbody id="tabela-admin"><tr><td colspan="5" style="text-align:center">Acesso restrito.</td></tr></tbody>
+                            <thead>
+                                <tr>
+                                    <th>Professor</th>
+                                    <th>Data</th>
+                                    <th>Horário</th>
+                                    <th>Recurso</th>
+                                    <th>Conteúdo / Obs</th> <th style="text-align:center">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-admin"><tr><td colspan="6" style="text-align:center">Acesso restrito.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -279,14 +289,14 @@
 
         <div class="navbar-wrap">
             <nav class="navigation">
-                <ul class="nav-ul" id="nav-ul">
-                    <button class="nav-item active" onclick="ativarMenu(this, 'aba-agendar')">
+                <ul class="nav-ul">
+                    <button class="nav-item active" onclick="irParaAba('aba-agendar', this)">
                         <ion-icon name="add-circle-outline"></ion-icon><span>Agendar</span>
                     </button>
-                    <button class="nav-item" onclick="ativarMenu(this, 'aba-geral')">
+                    <button class="nav-item" onclick="irParaAba('aba-geral', this)">
                         <ion-icon name="grid-outline"></ion-icon><span>Ver Dia</span>
                     </button>
-                    <button class="nav-item" onclick="ativarMenu(this, 'aba-minhas')">
+                    <button class="nav-item" onclick="irParaAba('aba-minhas', this)">
                         <ion-icon name="bookmark-outline"></ion-icon><span>Minhas</span>
                     </button>
                     <button class="nav-item" onclick="sair()">
@@ -300,9 +310,10 @@
 
 <script>
     // ==========================================
-    // CONFIGURAÇÕES FIREBASE
+    // 1. CONFIGURAÇÕES FIREBASE (Preencha Aqui)
     // ==========================================
-    const firebaseConfig = {apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
+    const firebaseConfig = {
+        apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
   authDomain: "sistema-yvypoty.firebaseapp.com",
   projectId: "sistema-yvypoty",
   storageBucket: "sistema-yvypoty.firebasestorage.app",
@@ -340,6 +351,9 @@
     let dataHoje = new Date().toISOString().split('T')[0];
     const HORARIOS = ["1º Aula", "2º Aula", "3º Aula", "4º Aula", "5º Aula", "6º Aula", "7º Aula", "8º Aula"];
 
+    // ==========================================
+    // 2. LÓGICA DE UI E TEMA
+    // ==========================================
     function atualizarRelogio() {
         const agora = new Date();
         const utc = agora.getTime() + (agora.getTimezoneOffset() * 60000);
@@ -349,21 +363,21 @@
     setInterval(atualizarRelogio, 1000); atualizarRelogio();
 
     function toggleTheme() {
-        const b = document.body;
+        const body = document.body;
         const btnText = document.querySelector('#theme-btn span');
         const icon = document.querySelector('#theme-btn ion-icon');
-        if (b.getAttribute('data-theme') === 'dark') {
-            b.removeAttribute('data-theme');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
             icon.name = 'moon-outline'; 
             if(btnText) btnText.innerText = 'Modo Escuro';
         } else {
-            b.setAttribute('data-theme', 'dark');
+            body.setAttribute('data-theme', 'dark');
             icon.name = 'sunny-outline'; 
             if(btnText) btnText.innerText = 'Modo Claro';
         }
     }
 
-    function ativarMenu(btnClicado, abaId) {
+    function irParaAba(abaId, btnClicado) {
         if(btnClicado) {
             document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
             btnClicado.classList.add('active');
@@ -373,14 +387,9 @@
 
         if(abaId === 'aba-minhas') carregarMinhasReservas();
         if(abaId === 'aba-geral') carregarVisaoDia();
-        window.scrollTo({ top: 0, behavior: 'smooth' }); 
-    }
-
-    function irParaAba(abaId) {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-        document.getElementById(abaId).classList.add('ativa');
         if(abaId === 'aba-admin') carregarReservasAdmin();
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' }); 
     }
 
     function atualizarRegraJustificativa() {
@@ -396,6 +405,9 @@
         verificarHorarios();
     }
 
+    // ==========================================
+    // 3. FIREBASE: LOGIN E SESSÃO
+    // ==========================================
     async function logar() {
         const e = document.getElementById('l-email').value;
         const p = document.getElementById('l-pass').value;
@@ -422,12 +434,21 @@
             document.getElementById('admin-extras').style.display = 'flex';
             document.getElementById('box-admin-nome').style.display = 'block';
             document.getElementById('user-role').innerHTML = '<ion-icon name="shield-checkmark-outline"></ion-icon> Admin';
+            
+            const selectProf = document.getElementById('f-prof-admin');
+            selectProf.innerHTML = '<option value="">Agendar para mim (Admin)</option>';
+            for (const emailProf in NOMES_PERSONALIZADOS) {
+                selectProf.innerHTML += `<option value="${emailProf}">${NOMES_PERSONALIZADOS[emailProf]}</option>`;
+            }
         }
         
-        ativarMenu(document.querySelector('.nav-item'), 'aba-agendar');
+        irParaAba('aba-agendar', document.querySelector('.nav-item'));
         resetarTimerInatividade();
     }
 
+    // ==========================================
+    // 4. FIREBASE: AGENDAMENTO E LEITURA
+    // ==========================================
     async function verificarHorarios() {
         const dt = document.getElementById('f-data').value;
         const rc = document.getElementById('f-recurso').value;
@@ -460,12 +481,24 @@
         const o = document.getElementById('f-obs').value;
         if(rc.includes('STE') && !j) return alert("Conteúdo obrigatório para as Salas STE!");
         
+        let emailSalvar = userLogado.email;
         let nomeSalvar = NOMES_PERSONALIZADOS[userLogado.email] || ("Prof. " + userLogado.email.split('@')[0]);
-        const nomeDigitado = document.getElementById('f-prof-admin').value;
-        if(EMAILS_ADMIN.includes(userLogado.email) && nomeDigitado) nomeSalvar = nomeDigitado;
+        
+        if(EMAILS_ADMIN.includes(userLogado.email)) {
+            const emailEscolhido = document.getElementById('f-prof-admin').value;
+            if(emailEscolhido !== '') {
+                emailSalvar = emailEscolhido;
+                nomeSalvar = NOMES_PERSONALIZADOS[emailEscolhido];
+            }
+        }
 
         if(confirm(`Confirmar ${rc} para ${hr}?`)) {
-            await db.collection("agendamentos").add({ email_prof: userLogado.email, nome_prof: nomeSalvar, data: dt, recurso: rc, horario: hr, justificativa: j, observacao: o, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+            await db.collection("agendamentos").add({ 
+                email_prof: emailSalvar, 
+                nome_prof: nomeSalvar, 
+                data: dt, recurso: rc, horario: hr, justificativa: j, observacao: o, 
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+            });
             alert("Agendado com sucesso!"); 
             document.getElementById('f-justificativa').value = ""; document.getElementById('f-obs').value = "";
             verificarHorarios();
@@ -483,7 +516,7 @@
         if(reservas.length === 0) { tb.innerHTML = "<tr><td colspan='4' style='text-align:center'>Você não tem agendamentos futuros.</td></tr>"; return; }
         reservas.forEach(d => {
             const dataBr = d.data.split('-').reverse().join('/');
-            tb.innerHTML += `<tr><td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td><td style="text-align:center"><button class="btn-action" onclick="deletar('${d.id}')"><ion-icon name="trash-outline"></ion-icon></button></td></tr>`;
+            tb.innerHTML += `<tr><td>${dataBr}</td><td>${d.horario}</td><td><span class="chip chip-blue">${d.recurso}</span></td><td style="text-align:center"><button class="btn-action" onclick="deletar('${d.id}')"><ion-icon name="trash-outline"></ion-icon></button></td></tr>`;
         });
     }
 
@@ -499,21 +532,31 @@
     }
 
     async function carregarReservasAdmin() {
-        const tb = document.getElementById('tabela-admin'); tb.innerHTML = "<tr><td colspan='5' style='text-align:center'>Carregando tudo...</td></tr>";
+        const tb = document.getElementById('tabela-admin'); tb.innerHTML = "<tr><td colspan='6' style='text-align:center'>Carregando tudo...</td></tr>";
         const snap = await db.collection("agendamentos").orderBy("data").get(); 
         tb.innerHTML = "";
-        if(snap.empty) { tb.innerHTML = "<tr><td colspan='5' style='text-align:center'>Nenhuma reserva.</td></tr>"; return; }
+        if(snap.empty) { tb.innerHTML = "<tr><td colspan='6' style='text-align:center'>Nenhuma reserva.</td></tr>"; return; }
+        
         snap.forEach(doc => {
             const d = doc.data(); const dataBr = d.data.split('-').reverse().join('/');
-            tb.innerHTML += `<tr><td>${d.nome_prof}</td><td>${dataBr}</td><td>${d.horario}</td><td>${d.recurso}</td><td style="text-align:center"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td></tr>`;
+            // AQUI ESTÁ A LÓGICA DE EXIBIR O CONTEÚDO E A OBSERVAÇÃO PARA O ADMIN
+            tb.innerHTML += `<tr>
+                <td>${d.nome_prof}</td>
+                <td>${dataBr}</td>
+                <td>${d.horario}</td>
+                <td><span class="chip chip-orange">${d.recurso}</span></td>
+                <td style="font-size: 11px; max-width: 150px; word-wrap: break-word;">${d.justificativa || '-'} <br> <i style="color:var(--text-muted)">${d.observacao || ''}</i></td>
+                <td style="text-align:center"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td>
+            </tr>`;
         });
     }
 
     async function deletar(id) { if(confirm("Deseja mesmo cancelar este agendamento?")) { await db.collection("agendamentos").doc(id).delete(); carregarMinhasReservas(); carregarReservasAdmin(); verificarHorarios(); } }
+    
     async function exportarCSV() {
         const snap = await db.collection("agendamentos").orderBy("data").get();
-        let csv = "Prof;Data;Horario;Recurso\n";
-        snap.forEach(doc => { const d = doc.data(); csv += `${d.nome_prof};${d.data};${d.horario};${d.recurso}\n`; });
+        let csv = "Prof;Data;Horario;Recurso;Conteudo;Observacao\n";
+        snap.forEach(doc => { const d = doc.data(); csv += `${d.nome_prof};${d.data};${d.horario};${d.recurso};${d.justificativa || '-'};${d.observacao || '-'}\n`; });
         const blob = new Blob(["\ufeff"+csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Reservas_STE.csv"; link.click();
     }
