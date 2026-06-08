@@ -43,7 +43,7 @@
         .login-box { position: relative; z-index: 1; width: 100%; background: var(--bg-shell); border-radius: 20px; padding: 40px 30px; text-align: center; }
         .logo-login { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--border); margin-bottom: 20px; object-fit: cover; }
         .login-box h2 { font-family: 'Syne', sans-serif; margin-bottom: 20px; font-weight: 800;}
-        .input-modern { width: 100%; height: 48px; padding: 0 15px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text-primary); font-weight: 500; outline: none; margin-bottom: 12px; transition: 0.3s;}
+        .input-modern { width: 100%; height: 48px; padding: 0 16px; background: var(--bg-input); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text-primary); font-weight: 500; outline: none; margin-bottom: 12px; transition: 0.3s;}
         .input-modern:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
         .btn-neon { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--accent), var(--success)); color: white; font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
 
@@ -59,6 +59,7 @@
         .role-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--accent-glow); color: var(--accent); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase;}
         .clock-display { margin-top: 10px; font-family: 'Syne', monospace; font-size: 20px; font-weight: 800; color: var(--success); }
         
+        /* BOTÕES LATERAIS PADRONIZADOS */
         .sidebar-buttons { width: 100%; display: flex; flex-direction: column; gap: 10px; }
         #admin-extras { display: none; flex-direction: column; gap: 10px; width: 100%; }
 
@@ -84,7 +85,7 @@
         .field-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1px;}
         
         .box-textos { display: flex; gap: 15px; margin-bottom: 20px; }
-        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid transparent; }
+        .info-box { flex: 1; padding: 15px; border-radius: 14px; background: var(--bg-input); border: 1.5px solid transparent; transition: 0.3s; }
         .info-box.required { border-color: rgba(239,68,68,0.3); }
         .info-box.optional { border-color: rgba(59,130,246,0.3); }
 
@@ -129,8 +130,6 @@
             .sidebar-buttons { flex-direction: row; flex-wrap: nowrap; gap: 10px;}
             .btn-sidebar { padding: 10px; font-size: 11px; flex: 1;}
             #admin-extras { flex-direction: row; flex-wrap: nowrap; }
-            
-            /* No mobile o texto dos botões admin quebram, então mantemos só o texto curto ou ícones */
             .btn-admin-panel span::after { content: "Admin"; font-size: 11px;}
             .btn-admin-panel span { font-size: 0; }
             .btn-admin-excel span::after { content: "Excel"; font-size: 11px;}
@@ -154,8 +153,8 @@
     <div class="login-box">
         <img src="logo.jpg" alt="Logo Escola" class="logo-login" onerror="this.src='https://ui-avatars.com/api/?name=STE&background=3b82f6&color=fff'">
         <h2 style="font-family: 'Syne'; margin-bottom: 20px;">Acesso STE</h2>
-        <input type="email" id="l-email" class="input-modern" placeholder="E-mail do professor" style="margin-bottom: 12px;">
-        <input type="password" id="l-pass" class="input-modern" placeholder="Senha" style="margin-bottom: 24px;">
+        <input type="email" id="l-email" class="input-modern" placeholder="E-mail" style="margin-bottom: 12px;">
+        <input type="password" id="l-pass" class="input-modern" placeholder="Senha" style="margin-bottom: 20px;">
         <button class="btn-neon" id="btn-login-action" onclick="logar()">Entrar no Sistema</button>
     </div>
 </div>
@@ -173,14 +172,14 @@
         </div>
         
         <div class="sidebar-buttons">
-            <button class="btn-sidebar btn-tema" id="theme-btn" onclick="toggleTheme()" title="Modo Claro/Escuro">
+            <button class="btn-sidebar btn-tema" id="theme-btn" onclick="toggleTheme()">
                 <ion-icon name="sunny-outline"></ion-icon> <span>Modo Claro</span>
             </button>
             <div id="admin-extras">
-                <button class="btn-sidebar btn-admin-panel" onclick="irParaAba('aba-admin')" title="Painel Admin">
+                <button class="btn-sidebar btn-admin-panel" onclick="irParaAba('aba-admin')">
                     <ion-icon name="shield-checkmark-outline"></ion-icon> <span>Painel Admin</span>
                 </button>
-                <button class="btn-sidebar btn-admin-excel" onclick="exportarCSV()" title="Baixar Planilha">
+                <button class="btn-sidebar btn-admin-excel" onclick="exportarCSV()">
                     <ion-icon name="cloud-download-outline"></ion-icon> <span>Baixar Excel</span>
                 </button>
             </div>
@@ -194,18 +193,17 @@
                 <div class="section-header"><h2 style="font-family: 'Syne';">01. Agendar Recurso</h2></div>
                 <div class="panel">
                     <div class="top-controls">
-                        <div class="control-group">
-                            <label class="field-label">Data</label>
-                            <input type="date" id="f-data" class="input-modern" onchange="verificarHorarios()">
-                        </div>
+                        <div class="control-group"><label class="field-label">Data</label><input type="date" id="f-data" class="input-modern" onchange="verificarHorarios()"></div>
                         <div class="control-group">
                             <label class="field-label">Equipamento</label>
                             <select class="input-modern" id="f-recurso" onchange="atualizarRegraJustificativa()">
-                                <optgroup label="Salas">
+                                <optgroup label="Salas & Laboratórios">
                                     <option value="STE 1">Sala STE 1</option>
                                     <option value="STE 2">Sala STE 2</option>
+                                    <option value="Sala de Arte">Sala de Arte</option>
+                                    <option value="Laboratório">Laboratório</option>
                                 </optgroup>
-                                <optgroup label="Equipamentos">
+                                <optgroup label="Audiovisual">
                                     <option value="Projetor 1">Projetor 1</option>
                                     <option value="Projetor 2">Projetor 2</option>
                                     <option value="Projetor 3">Projetor 3</option>
@@ -216,19 +214,18 @@
                                 </optgroup>
                             </select>
                         </div>
-                        <div class="control-group" id="box-admin-nome" style="display:none">
-                            <label class="field-label" style="color:var(--warning)">Reservar para Prof:</label>
-                            <select class="input-modern" id="f-prof-admin" style="border-color:var(--warning)">
-                            </select>
+                        <div class="control-group" id="box-admin-nome" style="display: none;">
+                            <label class="field-label" style="color: var(--warning);">Reservar para Prof:</label>
+                            <select class="input-modern" id="f-prof-admin" style="border-color: var(--warning);"></select>
                         </div>
                     </div>
                     <div class="box-textos">
-                        <div id="box-just" class="info-box required">
-                            <label id="tit-just" class="field-label" style="color:var(--danger)">Obrigatório: Conteúdo da Aula</label>
+                        <div class="info-box required" id="caixa-justificativa">
+                            <label class="field-label" id="tit-just" style="color:var(--danger)">Obrigatório: Conteúdo da Aula</label>
                             <input type="text" id="f-justificativa" class="input-modern" placeholder="Assunto da aula...">
                         </div>
                         <div class="info-box optional">
-                            <label class="field-label" style="color:var(--accent)">Opcional: Observação</label>
+                            <label class="field-label" style="color:var(--accent)">Observação</label>
                             <input type="text" id="f-obs" class="input-modern" placeholder="Opcional">
                         </div>
                     </div>
@@ -244,15 +241,25 @@
                         <div class="control-group"><input type="date" id="v-data" class="input-modern" onchange="carregarVisaoDia()"></div>
                         <div class="control-group">
                             <select id="v-recurso" class="input-modern" onchange="carregarVisaoDia()">
-                                <option value="STE 1">STE 1</option><option value="STE 2">STE 2</option>
-                                <option value="Projetor 1">Projetor 1</option><option value="Projetor 2">Projetor 2</option>
-                                <option value="Projetor 3">Projetor 3</option><option value="Projetor 4">Projetor 4</option>
-                                <option value="Som 1">Som 1</option><option value="Som 2">Som 2</option><option value="TV">TV</option>
+                                <optgroup label="Salas & Laboratórios">
+                                    <option value="STE 1">Sala STE 1</option>
+                                    <option value="STE 2">Sala STE 2</option>
+                                    <option value="Sala de Arte">Sala de Arte</option>
+                                    <option value="Laboratório">Laboratório</option>
+                                </optgroup>
+                                <optgroup label="Audiovisual">
+                                    <option value="Projetor 1">Projetor 1</option>
+                                    <option value="Projetor 2">Projetor 2</option>
+                                    <option value="Projetor 3">Projetor 3</option>
+                                    <option value="Projetor 4">Projetor 4</option>
+                                    <option value="Som 1">Som 1</option>
+                                    <option value="Som 2">Som 2</option>
+                                    <option value="TV">TV</option>
+                                </optgroup>
                             </select>
                         </div>
                     </div>
-                    <div class="grade-label">Mapa de Ocupação</div>
-                    <div class="grade-horarios" id="grid-visao">Selecione a data para visualizar.</div>
+                    <div class="grade-horarios" id="grid-visao"></div>
                 </div>
             </div>
 
@@ -273,32 +280,21 @@
                 <div class="panel">
                     <div class="table-wrapper">
                         <table class="tabela">
-                            <thead>
-                                <tr><th>Professor</th><th>Data</th><th>Horário</th><th>Recurso</th><th>Conteúdo / Obs</th><th style="text-align:center">Ação</th></tr>
-                            </thead>
+                            <thead><tr><th>Professor</th><th>Data</th><th>Horário</th><th>Recurso</th><th>Conteúdo / Obs</th><th style="text-align:center">Ação</th></tr></thead>
                             <tbody id="tabela-admin"><tr><td colspan="6" style="text-align:center">Acesso restrito.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="navbar-wrap">
             <nav class="navigation">
                 <ul class="nav-ul">
-                    <button class="nav-item active" onclick="irParaAba('aba-agendar', this)">
-                        <ion-icon name="add-circle-outline"></ion-icon><span>Agendar</span>
-                    </button>
-                    <button class="nav-item" onclick="irParaAba('aba-geral', this)">
-                        <ion-icon name="grid-outline"></ion-icon><span>Ver Dia</span>
-                    </button>
-                    <button class="nav-item" onclick="irParaAba('aba-minhas', this)">
-                        <ion-icon name="bookmark-outline"></ion-icon><span>Minhas</span>
-                    </button>
-                    <button class="nav-item" onclick="sair()">
-                        <ion-icon name="log-out-outline"></ion-icon><span>Sair</span>
-                    </button>
+                    <button class="nav-item active" onclick="irParaAba('aba-agendar', this)"><ion-icon name="add-circle-outline"></ion-icon><span>Agendar</span></button>
+                    <button class="nav-item" onclick="irParaAba('aba-geral', this)"><ion-icon name="grid-outline"></ion-icon><span>Ver Dia</span></button>
+                    <button class="nav-item" onclick="irParaAba('aba-minhas', this)"><ion-icon name="bookmark-outline"></ion-icon><span>Minhas</span></button>
+                    <button class="nav-item" onclick="sair()"><ion-icon name="log-out-outline"></ion-icon><span>Sair</span></button>
                 </ul>
             </nav>
         </div>
@@ -307,7 +303,7 @@
 
 <script>
     // ==========================================
-    // 1. CONFIGURAÇÕES FIREBASE
+    // CONFIGURAÇÕES FIREBASE (Preencha Aqui)
     // ==========================================
     const firebaseConfig = {
         apiKey: "AIzaSyB_aKD4XGiAofpM2sYwJf-5M3UIVgp_Geg",
@@ -326,7 +322,7 @@
         "davivilhalva@gmail.com": "Coor. Danilo",
         "eziquiel.64128@edutec.sed.ms.gov.br": "Prof. Eziquiel",
         "gislaine.483979@edutec.sed.ms.gov.br": "Prof. Gislaine",
-        "karine.457736@edutec.sed.ms.gov.br": "Prof. Sayuri",
+        "karine.457736@edutec.sed.ms.gov.br": "Sayuri",
         "micael.509831@edutec.sed.ms.gov.br": "Prof. Micael",
         "cilene.814757@edutec.sed.ms.gov.br": "Prof. Cilene",
         "editon.0903@edutec.sed.ms.gov.br": "Prof. Editon",
@@ -356,7 +352,7 @@
     const HORARIOS = ["1º Aula", "2º Aula", "3º Aula", "4º Aula", "5º Aula", "6º Aula", "7º Aula", "8º Aula"];
 
     // ==========================================
-    // 2. LÓGICA DE UI E TEMA
+    // LÓGICA DE UI E TEMA
     // ==========================================
     function atualizarRelogio() {
         const agora = new Date();
@@ -396,21 +392,28 @@
         window.scrollTo({ top: 0, behavior: 'smooth' }); 
     }
 
+    // NOVA REGRA DE JUSTIFICATIVA ABRANGENDO SALA DE ARTE E LABORATÓRIO
     function atualizarRegraJustificativa() {
         const recurso = document.getElementById('f-recurso').value;
-        const box = document.getElementById('box-just');
-        if (recurso.includes('STE')) {
-            box.className = 'info-box required';
-            document.getElementById('tit-just').innerText = 'Obrigatório: Conteúdo da Aula';
+        const caixa = document.getElementById('caixa-justificativa');
+        const titulo = document.getElementById('tit-just');
+        
+        if (recurso.includes('STE') || recurso.includes('Arte') || recurso.includes('Laboratório')) {
+            caixa.classList.remove('optional');
+            caixa.classList.add('required');
+            titulo.innerText = 'Obrigatório: Conteúdo da Aula';
+            titulo.style.color = 'var(--danger)';
         } else {
-            box.className = 'info-box optional';
-            document.getElementById('tit-just').innerText = 'Opcional: Observação';
+            caixa.classList.remove('required');
+            caixa.classList.add('optional');
+            titulo.innerText = 'Opcional: Observação';
+            titulo.style.color = 'var(--accent)';
         }
         verificarHorarios();
     }
 
     // ==========================================
-    // 3. FIREBASE: LOGIN E SESSÃO
+    // FIREBASE: LOGIN E SESSÃO
     // ==========================================
     async function logar() {
         const e = document.getElementById('l-email').value;
@@ -451,7 +454,7 @@
     }
 
     // ==========================================
-    // 4. FIREBASE: AGENDAMENTO E LEITURA
+    // FIREBASE: AGENDAMENTO E LEITURA
     // ==========================================
     async function verificarHorarios() {
         const dt = document.getElementById('f-data').value;
@@ -484,7 +487,10 @@
     async function salvar(dt, rc, hr) {
         const j = document.getElementById('f-justificativa').value;
         const o = document.getElementById('f-obs').value;
-        if(rc.includes('STE') && !j) return alert("Conteúdo obrigatório para as Salas STE!");
+        
+        if((rc.includes('STE') || rc.includes('Arte') || rc.includes('Laboratório')) && !j) {
+            return alert("O Conteúdo da Aula é obrigatório para as Salas Especiais e Laboratórios!");
+        }
         
         let emailSalvar = userLogado.email;
         let nomeSalvar = NOMES_PERSONALIZADOS[userLogado.email] || ("Prof. " + userLogado.email.split('@')[0]);
@@ -516,7 +522,6 @@
         
         let reservas = [];
         snap.forEach(doc => { 
-            // O FILTRO DAS DATAS PASSADAS AQUI
             if (doc.data().data >= dataHoje) {
                 reservas.push({ id: doc.id, ...doc.data() }); 
             }
@@ -527,7 +532,7 @@
         if(reservas.length === 0) { tb.innerHTML = "<tr><td colspan='4' style='text-align:center'>Você não tem agendamentos futuros.</td></tr>"; return; }
         reservas.forEach(d => {
             const dataBr = d.data.split('-').reverse().join('/');
-            tb.innerHTML += `<tr><td>${dataBr}</td><td>${d.horario}</td><td><span class="chip chip-blue">${d.recurso}</span></td><td style="text-align:center"><button class="btn-action" onclick="deletar('${d.id}')"><ion-icon name="trash-outline"></ion-icon></button></td></tr>`;
+            tb.innerHTML += `<tr><td>${dataBr}</td><td>${d.horario}</td><td><span style="font-weight:600">${d.recurso}</span></td><td style="text-align:center"><button class="btn-action" onclick="deletar('${d.id}')"><ion-icon name="trash-outline"></ion-icon></button></td></tr>`;
         });
     }
 
@@ -551,15 +556,20 @@
 
         snap.forEach(doc => {
             const d = doc.data(); 
-            // O FILTRO DAS DATAS PASSADAS NO ADMIN AQUI
             if (d.data >= dataHoje) {
                 temReserva = true;
                 const dataBr = d.data.split('-').reverse().join('/');
+                
+                // Colorir chips por tipo de sala para melhor visualização
+                let corChip = "rgba(59,130,246,0.12); color: var(--accent)";
+                if (d.recurso.includes("Arte") || d.recurso.includes("Laboratório")) corChip = "rgba(16,185,129,0.12); color: var(--success)";
+                if (d.recurso.includes("STE")) corChip = "rgba(245,158,11,0.12); color: var(--warning)";
+                
                 tb.innerHTML += `<tr>
                     <td>${d.nome_prof}</td>
                     <td>${dataBr}</td>
                     <td>${d.horario}</td>
-                    <td><span class="chip chip-orange">${d.recurso}</span></td>
+                    <td><span style="background: ${corChip}; padding: 4px 10px; border-radius: 20px; font-weight:bold; font-size:12px;">${d.recurso}</span></td>
                     <td style="font-size: 11px; max-width: 150px; word-wrap: break-word;">${d.justificativa || '-'} <br> <i style="color:var(--text-muted)">${d.observacao || ''}</i></td>
                     <td style="text-align:center"><button class="btn-action" onclick="deletar('${doc.id}')"><ion-icon name="close-circle-outline"></ion-icon></button></td>
                 </tr>`;
@@ -576,7 +586,7 @@
         let csv = "Prof;Data;Horario;Recurso;Conteudo;Observacao\n";
         snap.forEach(doc => { const d = doc.data(); csv += `${d.nome_prof};${d.data};${d.horario};${d.recurso};${d.justificativa || '-'};${d.observacao || '-'}\n`; });
         const blob = new Blob(["\ufeff"+csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Reservas_STE.csv"; link.click();
+        const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "Reservas_Yvy_Poty.csv"; link.click();
     }
 
     let timer;
